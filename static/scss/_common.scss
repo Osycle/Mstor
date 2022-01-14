@@ -1,0 +1,31 @@
+
+
+
+
+
+$color-1: #647eff;
+
+
+$color-gray-1: #F8F8F8; // #05141F opacity 3% (old color #f2f2f2)
+$color-gray-2: #9EA1A2;
+$color-gray-3: #CDD0D2; // #05141F opacity 20% (old color #ccc)
+$color-gray-4: #9BA1A5; // #05141F opacity 40% (old color #999)
+$color-gray-5: #697279; // #05141F opacity 60% (old color #666)
+$color-gray-6: #37434C; // #05141F opacity 80% (old color #1f1f1f)
+
+
+
+.container{
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container-fluid{
+  padding-left: 60px;
+  padding-right: 60px;
+}
+
+input:focus, button:focus{
+	outline: transparent;
+}
