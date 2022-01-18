@@ -37,23 +37,24 @@ export default {
       ]
     }
   },
-  async asyncData(context){
-    try{
-      
-      const page_data = await context.store.dispatch("trans/fetchCells", {
 
-          title: "test",
-          description: "test",
-          tags: "test"
+  // async asyncData(context){
+  //   try{
+      
+  //     const page_data = await context.store.dispatch("trans/fetchCells", {
+
+  //         title: "test",
+  //         description: "test",
+  //         tags: "test"
         
-      })
-      //console.log(page_data);
-      return {
-        page_data
-      }
-    }catch(e){
-      context.error(e);
-    }
-  },
+  //     })
+  //     //console.log(page_data);
+  //     return {
+  //       page_data
+  //     }
+  //   }catch(e){
+  //     context.error(e);
+  //   }
+  // },
 }
 </script>
