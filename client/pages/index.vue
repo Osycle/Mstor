@@ -3,16 +3,16 @@
     <div class="container-fluid">
       <nuxt-link to="/test">Тест</nuxt-link>
       <div class="cells">
-        <div class="cell" v-for="(key) in 5" :key="key">
+        <div class="cell" v-for="(cell, key) in cells" :key="key" @click="ins">
           <div class="cell-wrapper">
             <div class="date-content">
-              {{ new Date(cells[0].date) | dateFormat('D MMMM YYYY')}}
+              {{ new Date(cell.date_time) | dateFormat('D MMMM YYYY')}}
             </div>
             <div class="img-content">
             </div>
             <div class="text-content">
-              <span class="cell-title">{{cells[0].description}}</span>
-              <span v-html="cells[0].description"></span>
+              <span class="cell-title">{{cell.title}}</span>
+              <span v-html="cell.description"></span>
             </div>
           </div>
         </div>
@@ -28,33 +28,49 @@
 export default {
   data(){
     return {
-      cells: [
-        {
-          date: 1642162712593,
-          title: "Метохондрия",
-          description: "Метохондрия Выделяет ATF, поглощает кислород, выделяет  угл. газ и воду"
-        }
-      ]
+      test: [],
+      // cells: [
+      //   {
+      //     date: 1642162712593,
+      //     title: "Метохондрия",
+      //     description: "Метохондрия Выделяет ATF, поглощает кислород, выделяет  угл. газ и воду"
+      //   }
+      // ]
     }
   },
+  async mounted(){
 
-  // async asyncData(context){
-  //   try{
-      
-  //     const page_data = await context.store.dispatch("trans/fetchCells", {
+    // this.selectComplectations = await this.$axios.$post("http://mstor.server", {ols:122},{
+    //   //'Content-Type': 'application/json',
 
-  //         title: "test",
-  //         description: "test",
-  //         tags: "test"
-        
-  //     })
-  //     //console.log(page_data);
-  //     return {
-  //       page_data
-  //     }
-  //   }catch(e){
-  //     context.error(e);
-  //   }
-  // },
+    // });
+    // console.log(this.selectComplectations, "created")
+  },
+  async asyncData(context){
+    try{
+      const cells = await context.store.dispatch("trans/query", {
+        action: "fetch"
+      })
+      console.log(cells);
+      return {
+        cells
+      }
+    }catch(e){
+      context.error(e);
+    }
+  },
+  methods: {
+    async ins(){
+      this.test = await this.$axios.$post("/", {
+        action: "insert",
+        params: {
+          title: "new Title",
+          description: "new Desc",
+          tags: "new Tags"
+        }
+      })
+      console.log(this.test);
+    }
+  }
 }
 </script>

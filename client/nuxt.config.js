@@ -39,17 +39,14 @@ export default {
     '@nuxtjs/axios',
     '@nuxt/http',
   ],
-  // axios: {
-  //   //baseURL: 'https://lada.uz/temp-api/',
-  //   baseURL: 'http://mstor.server',
-  //   //baseURL: 'https://html.lifestyle.uz/kia-api/',
-  //   //baseURL: 'http://kia-api-php/',
-  //   //withCredentials: true,
-  //   headers: {
-  //     Accept: 'application/x-www-form-urlencoded',
-  //     'Content-Type': 'application/x-www-form-urlencoded'
-  //   }
-  // },
+  axios: {
+    baseURL: 'http://mstor.server',
+    withCredentials: true,
+    headers: {
+      //Accept: "*/*",
+      //"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+    }
+  },
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {

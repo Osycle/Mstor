@@ -19,6 +19,14 @@ export default {
     Header,
     Footer
   },
+  head() {
+    return {
+      script: [
+        {src: '/js/plugins/jquery.min.js'},
+        {src: '/js/plugins/jquery.fancybox.js'},
+      ],
+    }
+  },
 }
 
 
