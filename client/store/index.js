@@ -1,9 +1,24 @@
 import Vue from 'vue';
 import VueFilterDateFormat from '@vuejs-community/vue-filter-date-format';
+import wysiwyg from "vue-wysiwyg";
 
-
-
-
+Vue.use(wysiwyg, {
+  // { [module]: boolean (set true to hide) }
+  hideModules: { "bold": false },
+ 
+  // you can override icons too, if desired
+  // just keep in mind that you may need custom styles in your application to get everything to align
+  //iconOverrides: { "bold": "<i class="your-custom-icon"></i>" },
+ 
+  // if the image option is not set, images are inserted as base64
+  // image: {
+  //   uploadURL: "/api/myEndpoint",
+  //   dropzoneOptions: {}
+  // },
+ 
+  // limit content height if you wish. If not set, editor size will grow with content.
+  maxHeight: "500px"
+});
 Vue.use(VueFilterDateFormat, {
   dayOfWeekNames: [
     'Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг',

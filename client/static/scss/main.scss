@@ -5,11 +5,12 @@
 @import "_normalize";
 @import "_helper";
 @import "_common";
-
+@import "_fancybox";
+@import "@/node_modules/vue-wysiwyg/dist/vueWysiwyg.css";
 
 body{
   font-size: 15px;
-  font-family: sans-serif;
+  font-family: "Myriad Pro";
   background-color: white;
 }
 
@@ -27,22 +28,36 @@ body{
   }
 }
 
-.input-content{
-  position: relative;
-  .icon-content{
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    line-height: 0;
-  }
-  input{
-    height: 36px;
+input, button, textarea{
+  border: 0;
+  &:focus, &:active{
     border: 0;
-    padding: 5px 15px;
+    outline: none;
   }
 }
+button{
+  background-color: initial;
+  &:hover{
+    cursor: pointer;
+  }
+}
+
 .search{
+  .input-content{
+    position: relative;
+    .icon-content{
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      line-height: 0;
+    }
+    input{
+      height: 36px;
+      padding: 5px 15px;
+      padding-left: 50px;
+    }
+  }
   input{
     padding-left: 50px;
     background-color: rgba(black, 0.2);
@@ -65,20 +80,15 @@ body{
 
 
 .cells{
-  margin-top: 30px;
+  margin-top: 50px;
+  margin-bottom: 50px;
   //display: grid;
   //grid-template-columns: repeat(12, 1fr);
   //grid-gap: 10px;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  .cell{
-    flex-shrink: 0;
-    //flex-basis: 130px;    
-    margin: 10px;
-    font-size: 12px;
-    position: relative;
-  }
+
   .text-content{
     //padding: 2px 5px;
   }
@@ -87,6 +97,7 @@ body{
     margin-bottom: 5px;
   }
   .cell-wrapper{
+    box-shadow: -1px 4px 7px -3px black;
     padding: 8px;
     color: white;
     width: 130px;
@@ -102,4 +113,64 @@ body{
     display: inline-block;
     overflow: hidden;
   }
+}
+.cell{
+  flex-shrink: 0;
+  //flex-basis: 130px;    
+  margin: 10px;
+  font-size: 12px;
+  position: relative;
+  .btn-edit{
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background-color: rgba(white, 0.1);
+    width: 30px;
+    height: 25px;
+    transition: 0.1s ease;
+    svg{
+      fill: white;
+      width: 20px;
+    }
+    &:hover{
+      background-color: $color-3;
+    }
+  }
+}
+
+.addcell{
+  textarea{
+    width: 100%;
+    min-height: 50px;
+    border: 1px solid $color-1;
+    resize: none;
+  }
+}
+
+.fixpanel{
+  position: fixed;
+  right: 30px;
+  bottom: 20px;
+  .btn-add{
+    background-color: $color-3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 8px;
+    transition: 0.3s ease;
+    svg{
+      width: 30px;
+      transition: 0.3s ease;
+      fill: $color-1;
+    }
+    &:hover{
+      background-color: $color-1;
+      svg{
+        fill: white;
+      }
+    }
+  }
+}
+.addcell{
+  width: 600px;
 }
