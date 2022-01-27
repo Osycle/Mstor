@@ -9,7 +9,7 @@
 </template>
 
 <style lans="scss">
-  /* @import "~vue-wysiwyg/dist/vueWysiwyg.css"; */
+  
   
 </style>
 <script>
@@ -26,7 +26,7 @@ export default {
     return {
       script: [
         {src: '/js/plugins/jquery.min.js'},
-        {src: '/js/plugins/jquery.fancybox.js'},
+        // {src: '/js/plugins/jquery.fancybox.js'},
       ],
       link: [
         {href: '/fonts/MyriadPro/stylesheet.css'},

@@ -18,13 +18,15 @@ export default {
   loading: { color: '#05141F' },
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+    '@fancyapps/ui/dist/fancybox.css',
     '@/static/scss/main.scss'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    // { src: '~plugins/nuxt-quill-plugin', ssr: false }
+    { src: '~/plugins/lodash.js' }
   ],
-
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 

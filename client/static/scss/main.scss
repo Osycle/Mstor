@@ -6,7 +6,9 @@
 @import "_helper";
 @import "_common";
 @import "_fancybox";
-@import "@/node_modules/vue-wysiwyg/dist/vueWysiwyg.css";
+
+
+
 
 body{
   font-size: 15px;
@@ -120,25 +122,44 @@ button{
   margin: 10px;
   font-size: 12px;
   position: relative;
-  .btn-edit{
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
+  .btn-edit, .btn-del{
     background-color: rgba(white, 0.1);
     width: 30px;
     height: 25px;
     transition: 0.1s ease;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn-edit{
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
     svg{
       fill: white;
-      width: 20px;
+      width: 18px;
     }
     &:hover{
       background-color: $color-3;
     }
   }
+  .btn-del{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    svg{
+      fill: white;
+      width: 16px;
+    }
+    &:hover{
+      background-color: rgb(158, 0, 0);
+    }
+  }
 }
 
 .addcell{
+  background-color: white;
   textarea{
     width: 100%;
     min-height: 50px;
