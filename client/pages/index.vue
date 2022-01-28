@@ -4,7 +4,7 @@
       <nuxt-link to="/test">Тест</nuxt-link>
       <div class="cells">
         {{cells.length}}
-        <div class="cell" v-for="(cell, key) in cells" :key="key" v-if="cells.length > 6">
+        <div class="cell" v-for="(cell, key) in cells" :key="key">
           <div class="cell-wrapper">
             <div class="date-content">
               {{ new Date(cell.date_time) | dateFormat('D MMMM YYYY')}}
@@ -35,7 +35,6 @@
         </a>
       </span>
     </div>
-  <!-- <Editor v-if="addcell_modal_status"/> -->
     <div id="addcell_parent">
       <div id="addcell-modal">
         <div class="addcell">
@@ -108,8 +107,11 @@ export default {
     },
     async delCell(id){
       var vm = this
-      var s = vm.$_.remove(vm.cells, {id})
+      var z = new Array();
       
+      vm.$_.remove(vm.cells, {id})
+      vm.cells = vm.$_.concat(vm.cells)
+      console.log(vm.cells);
       //this.$set(this.cells)
 
       console.log(vm.cells, s, id)
