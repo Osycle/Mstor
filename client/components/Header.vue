@@ -34,3 +34,11 @@ export default {
   }
 }
 </script>
+
+
+<style lang="scss">
+  //@import "@/static/scss/_common.scss";
+  body{
+    //background-color: $color-1;
+  }
+</style>

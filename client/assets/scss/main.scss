@@ -10,24 +10,11 @@
 
 
 
+
 body{
   font-size: 15px;
   font-family: "Myriad Pro";
   background-color: white;
-}
-
-
-
-.header{
-  .header-wrapper{
-    height: 80px;
-    width: 100%;
-    background-color: $color-1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0px 8px 3px -4px rgba(black, 0.2);
-  }
 }
 
 input, button, textarea{
@@ -41,6 +28,19 @@ button{
   background-color: initial;
   &:hover{
     cursor: pointer;
+  }
+}
+
+
+.header{
+  .header-wrapper{
+    height: 80px;
+    width: 100%;
+    background-color: $color-1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 8px 3px -4px rgba(black, 0.2);
   }
 }
 
@@ -78,8 +78,21 @@ button{
   }
 }
 
-
-
+/* ANIMAIONS */
+@keyframes shadow-rotate{
+  0% {
+    box-shadow: inset -1px -1px 0px 0px black;
+  }
+  25% {
+    box-shadow: inset 1px -1px 0px 0px black;
+  }
+  50% {
+    box-shadow: inset 1px 1px 0px 0px black;
+  }
+  75% {
+    box-shadow: inset -1px 1px 0px 0px black;
+  }
+}
 
 .cells{
   margin-top: 50px;
@@ -158,15 +171,6 @@ button{
   }
 }
 
-.addcell{
-  background-color: white;
-  textarea{
-    width: 100%;
-    min-height: 50px;
-    border: 1px solid $color-1;
-    resize: none;
-  }
-}
 
 .fixpanel{
   position: fixed;
@@ -191,7 +195,4 @@ button{
       }
     }
   }
-}
-.addcell{
-  width: 600px;
 }

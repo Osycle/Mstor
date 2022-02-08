@@ -19,7 +19,8 @@ export default {
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     '@fancyapps/ui/dist/fancybox.css',
-    '@/static/scss/main.scss'
+    '@assets/scss/_common.scss',
+    '@assets/scss/main.scss'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins

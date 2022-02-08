@@ -1,4 +1,5 @@
 import Vue from 'vue';
+//import "@/static/scss/_common.scss";
 import VueFilterDateFormat from '@vuejs-community/vue-filter-date-format';
 
 

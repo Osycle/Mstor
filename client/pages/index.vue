@@ -2,6 +2,7 @@
   <div class="index-wrapper">
     <div class="container-fluid">
       <nuxt-link to="/test">Тест</nuxt-link>
+      <Modal v-if="modal_open_status" :modal-data="cells" @modal-manager="modalManager"/>
       <div class="cells">
         {{cells.length}}
         <div class="cell" v-for="(cell, key) in cells" :key="key">
@@ -9,8 +10,7 @@
             <div class="date-content">
               {{ new Date(cell.date_time) | dateFormat('D MMMM YYYY')}}
             </div>
-            <div class="img-content">
-            </div>
+            <div class="img-content"></div>
             <div class="text-content">
               <span class="cell-title">{{cell.title}}</span>
               <span v-html="cell.description"></span>
@@ -30,34 +30,17 @@
     </div>
     <div class="fixpanel">
       <span class="btn-content">
-        <a href="javascript:;" class="btn-add" @click="addCellModal">
+        <a href="javascript:;" class="btn-add" @click="modalManager('open')">
           <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 32 32" viewBox="0 0 32 32"><switch><g><path d="M28,2H7C6.4,2,6,2.4,6,3v3H3C2.4,6,2,6.4,2,7v21c0,0.6,0.4,1,1,1h21c0.6,0,1-0.4,1-1v-3h3     c0.6,0,1-0.4,1-1V3C29,2.4,28.6,2,28,2z M23,27H4V8h3h16v16V27z M27,23h-2V7c0-0.6-0.4-1-1-1H8V4h19V23z"/><path d="M18,17h-4v-4c0-0.6-0.4-1-1-1s-1,0.4-1,1v4H8c-0.6,0-1,0.4-1,1s0.4,1,1,1h4v4c0,0.6,0.4,1,1,1s1-0.4,1-1     v-4h4c0.6,0,1-0.4,1-1S18.6,17,18,17z"/></g></switch></svg>
         </a>
       </span>
-    </div>
-    <div id="addcell_parent">
-      <div id="addcell-modal">
-        <div class="addcell">
-          <div class="title-content">
-            
-          </div>
-          <div class="text-content">
-            <textarea name="" id="" v-model="description_content">
-
-            </textarea>
-          </div>
-          <div class="btn-content">
-            <button type="button" @click="addCell">Добавить</button>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
 import {Fancybox} from "@fancyapps/ui";
-
+import Modal from '@/components/Modal'
 
 
 export default {
@@ -65,15 +48,17 @@ export default {
     return {
       description_content: null,
       test: [],
-      addcell_modal_status: false,
+      modal_open_status: false,
       cells: []
     }
   },
+  compontents:{
+    Modal
+  },
   async mounted(){
     
-
+    console.log(Modal)
   },
-
   async asyncData(context){
     try{
       const cells = await context.store.dispatch("trans/query", {
@@ -93,22 +78,18 @@ export default {
     },
   },
   methods: {
-
-    async addCell(){
-      this.test = await this.$axios.$post("/", {
-        action: "insert",
-        params: {
-          title: "new Title",
-          description: "new Desc",
-          tags: "new Tags"
-        }
-      })
-      console.log(this.test);
+    modalManager(act){
+      console.log("index", act)
+      switch(act){
+        case "open":
+          this.modal_open_status = true; break;
+        case "close":
+          this.modal_open_status = false; break;
+      }
     },
     async delCell(id){
       var vm = this
-      var z = new Array();
-      
+
       vm.$_.remove(vm.cells, {id})
       vm.cells = vm.$_.concat(vm.cells)
       console.log(vm.cells);
@@ -130,28 +111,6 @@ export default {
       }
         
     },
-    async addCellModal (e){
-      Fancybox.show(
-        //[{ src: '<wysiwyg v-model="myHTML" />', type: "html" }],
-        [{ src: '#addcell-modal', type: "inline" }],
-        {
-          infinite: false,
-          dragToClose: false,
-          parentEl: addcell_parent,
-          keyboard: null,
-          //placeFocusBack: false,
-          //autoFocus: false,
-          //trapFocus: false,
-          //placeFocusBack: false,
-          //click: null
-        }
-      );
-      var vm = this;
-      vm.addcell_modal_status = true
-      
-      console.log(this);
-      //Vue.forceUpdate();
-    }
   },
   
 }
