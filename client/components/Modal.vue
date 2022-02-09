@@ -15,6 +15,14 @@
             <div class="text-content">
               <textarea name="" id="" v-model="description"></textarea>
             </div>
+            <!-- <tags-input element-id="tags"
+                v-model="selectedTags"
+                :existing-tags="[
+                    { key: 'web-development', value: 'Web Development' },
+                    { key: 'php', value: 'PHP' },
+                    { key: 'javascript', value: 'JavaScript' },
+                ]"
+                :typeahead="true"></tags-input> -->
           </div>
           <div class="modal-footer">
             <div class="btn-content">
@@ -30,10 +38,12 @@
 </template>
 
 <script>
+
   export default {
     props: ['modal-data', 'modal-manager'],
     data(){
       return {
+        selectedTags: null,
         title: "",
         description: "",
         tags: "",
@@ -43,7 +53,7 @@
     },
     methods: {
       async addCell(){
-        this.response = await this.$axios.$post("/", {
+        const response = await this.$axios.$post("/", {
           action: "insert",
           params: {
             title: this.title,
@@ -51,6 +61,11 @@
             tags: this.tags,
           }
         })
+        if(response.status){
+          this.$emit("append", response.cell)
+          this.$emit("modal-manager", "close");
+        }
+
         console.log(this.response);
       },
     },
@@ -131,7 +146,7 @@
         border-left: var(--border-def);
         &:hover{
           box-shadow: inset -1px -1px 0px 0px black;
-          animation: var(--animation-1);
+          animation: var(--animation-sir);
         }
       }
     }
@@ -158,7 +173,7 @@
       background-color: var(--color-3);
       &:hover{
         box-shadow: inset -1px -1px 0px 0px black;
-        animation: var(--animation-1);
+        animation: var(--animation-sir);
       }
       &:before, &:after{
         content: "";

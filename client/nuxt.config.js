@@ -26,7 +26,8 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     // { src: '~plugins/nuxt-quill-plugin', ssr: false }
-    { src: '~/plugins/lodash.js' }
+    { src: '~/plugins/lodash.js' },
+    { src: '~/plugins/vue-tagsinput.js' },
   ],
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,

@@ -1,9 +1,5 @@
 
 
-
-
-
-
 :root{
   --color-1: #202b60;
   --color-2: #6881ff;
@@ -15,7 +11,61 @@
   --color-gray-2: #efefef;
   --color-gray-3: #cccccc;
   --border-def: 3px solid var(--color-black);
-  --animation-1: shadow-rotate 0.4s linear 0s infinite;
+  --animation-sir: shadow-in-rotate 0.4s linear 0s infinite;
+  --animation-sor: shadow-out-rotate 0.4s linear 0s infinite;
+}
+
+/* ANIMAIONS */
+@keyframes shadow-in-rotate{
+  0% {
+    box-shadow: inset -1px -1px 0px 0px black;
+  }
+  25% {
+    box-shadow: inset 1px -1px 0px 0px black;
+  }
+  50% {
+    box-shadow: inset 1px 1px 0px 0px black;
+  }
+  75% {
+    box-shadow: inset -1px 1px 0px 0px black;
+  }
+}
+@keyframes shadow-out-rotate{
+  0% {
+    box-shadow: -1px -1px 0px 0px black;
+  }
+  25% {
+    box-shadow: 1px -1px 0px 0px black;
+  }
+  50% {
+    box-shadow: 1px 1px 0px 0px black;
+  }
+  75% {
+    box-shadow: -1px 1px 0px 0px black;
+  }
+}
+
+
+
+
+body{
+  font-size: 15px;
+  font-family: "Myriad Pro";
+  background-color: white;
+}
+
+input, button, textarea{
+  border: 0;
+  &:focus, &:active{
+    border: 0;
+    outline: none;
+  }
+}
+button{
+  background-color: initial;
+  &:hover{
+    cursor: pointer;
+  }
 }
 
 

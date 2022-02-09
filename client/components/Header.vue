@@ -37,8 +37,52 @@ export default {
 
 
 <style lang="scss">
-  //@import "@/static/scss/_common.scss";
-  body{
-    background-color: $color-1;
+  .header{
+    overflow: hidden;
+    .header-wrapper{
+      height: 80px;
+      width: 100%;
+      background-color: $color-1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      //box-shadow: 0px 8px 3px -4px rgba(black, 0.2);
+      border: var(--border-def);
+    }
   }
+
+  .search{
+    .input-content{
+      position: relative;
+      .icon-content{
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        line-height: 0;
+      }
+      input{
+        height: 36px;
+        padding: 5px 15px;
+        padding-left: 50px;
+      }
+    }
+    input{
+      padding-left: 50px;
+      background-color: rgba(black, 0.2);
+      color: white;
+      &:focus~.icon-content{
+        svg{
+          fill: $color-gray-1;
+        }
+      }
+    }
+    .icon-content{
+      svg{
+        transition: 0.2s ease;
+        fill: $color-gray-4;
+      }
+    }
+  }
+
 </style>

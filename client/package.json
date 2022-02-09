@@ -14,6 +14,7 @@
     "@nuxtjs/axios": "^5.12.0",
     "@nuxtjs/pwa": "^3.3.5",
     "@nuxtjs/style-resources": "^1.2.1",
+    "@voerro/vue-tagsinput": "^2.7.1",
     "@vuejs-community/vue-filter-date-format": "^1.6.3",
     "core-js": "^3.19.3",
     "lodash": "^4.17.21",

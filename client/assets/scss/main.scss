@@ -11,88 +11,7 @@
 
 
 
-body{
-  font-size: 15px;
-  font-family: "Myriad Pro";
-  background-color: white;
-}
 
-input, button, textarea{
-  border: 0;
-  &:focus, &:active{
-    border: 0;
-    outline: none;
-  }
-}
-button{
-  background-color: initial;
-  &:hover{
-    cursor: pointer;
-  }
-}
-
-
-.header{
-  .header-wrapper{
-    height: 80px;
-    width: 100%;
-    background-color: $color-1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0px 8px 3px -4px rgba(black, 0.2);
-  }
-}
-
-.search{
-  .input-content{
-    position: relative;
-    .icon-content{
-      position: absolute;
-      left: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      line-height: 0;
-    }
-    input{
-      height: 36px;
-      padding: 5px 15px;
-      padding-left: 50px;
-    }
-  }
-  input{
-    padding-left: 50px;
-    background-color: rgba(black, 0.2);
-    color: white;
-    &:focus~.icon-content{
-      svg{
-        fill: $color-gray-1;
-      }
-    }
-  }
-  .icon-content{
-    svg{
-      transition: 0.2s ease;
-      fill: $color-gray-4;
-    }
-  }
-}
-
-/* ANIMAIONS */
-@keyframes shadow-rotate{
-  0% {
-    box-shadow: inset -1px -1px 0px 0px black;
-  }
-  25% {
-    box-shadow: inset 1px -1px 0px 0px black;
-  }
-  50% {
-    box-shadow: inset 1px 1px 0px 0px black;
-  }
-  75% {
-    box-shadow: inset -1px 1px 0px 0px black;
-  }
-}
 
 .cells{
   margin-top: 50px;
@@ -104,30 +23,9 @@ button{
   flex-wrap: wrap;
   flex-direction: row;
 
-  .text-content{
-    //padding: 2px 5px;
-  }
-  .date-content{
-    font-size: 11px;
-    margin-bottom: 5px;
-  }
-  .cell-wrapper{
-    box-shadow: -1px 4px 7px -3px black;
-    padding: 8px;
-    color: white;
-    width: 130px;
-    height: 130px;
-    background-color: $color-1;
-  }
-  .cell-title{
-    font-size: 13px;
-    font-weight: 600;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 100%;
-    display: inline-block;
-    overflow: hidden;
-  }
+
+
+
 }
 .cell{
   flex-shrink: 0;
@@ -135,15 +33,35 @@ button{
   margin: 10px;
   font-size: 12px;
   position: relative;
+  &:hover{
+    animation: var(--animation-sor);
+    .btn-edit, .btn-del{
+      transform: scale(1);
+    }
+  }
+  .date-content{
+    position: absolute;
+    bottom: 5px;
+    left: 11px;
+    font-size: 11px;
+    margin-bottom: 5px;
+  }
+  .text-content{
+    padding-top: 25px;
+  }
   .btn-edit, .btn-del{
     background-color: rgba(white, 0.1);
     width: 30px;
     height: 25px;
-    transition: 0.1s ease;
+    transition: 0.3s ease;
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    transform: scale(0);
+    &:hover{
+      animation: var(--animation-sir);
+    }
   }
   .btn-edit{
     position: absolute;
@@ -152,9 +70,13 @@ button{
     svg{
       fill: white;
       width: 18px;
+      transition: 0.3s ease;
     }
     &:hover{
       background-color: $color-3;
+      svg{
+        fill: $color-1;
+      }
     }
   }
   .btn-del{
@@ -164,13 +86,33 @@ button{
     svg{
       fill: white;
       width: 16px;
+      transition: 0.3s ease;
     }
     &:hover{
       background-color: rgb(158, 0, 0);
     }
   }
-}
 
+}
+.cell-wrapper{
+  border: var(--border-def);
+  padding: 8px;
+  color: white;
+  width: 130px;
+  height: 130px;
+  background-color: $color-1;
+  //display: flex;
+  //align-items: center;
+}
+.cell-title{
+  font-size: 13px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+  display: inline-block;
+  overflow: hidden;
+}
 
 .fixpanel{
   position: fixed;

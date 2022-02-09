@@ -2,18 +2,15 @@
   <div class="index-wrapper">
     <div class="container-fluid">
       <nuxt-link to="/test">Тест</nuxt-link>
-      <Modal v-if="modal_open_status" :modal-data="cells" @modal-manager="modalManager"/>
+      <Modal v-if="modal_open_status" :modal-data="cells" @modal-manager="modalManager" @append="append"/>
       <div class="cells">
-        {{cells.length}}
         <div class="cell" v-for="(cell, key) in cells" :key="key">
           <div class="cell-wrapper">
             <div class="date-content">
               {{ new Date(cell.date_time) | dateFormat('D MMMM YYYY')}}
             </div>
-            <div class="img-content"></div>
             <div class="text-content">
-              <span class="cell-title">{{cell.title}}</span>
-              <span v-html="cell.description"></span>
+              <span>{{cell.description | textLimit(90)}}</span>
             </div>
             <div class="btn-content">
               <button type="button" class="btn-edit" title="Редактировать">
@@ -41,6 +38,7 @@
 <script>
 import {Fancybox} from "@fancyapps/ui";
 import Modal from '@/components/Modal'
+
 
 
 export default {
@@ -87,23 +85,25 @@ export default {
           this.modal_open_status = false; break;
       }
     },
+    append(cell){
+      this.cells.push(cell);
+    },
     async delCell(id){
       var vm = this
-
-      vm.$_.remove(vm.cells, {id})
-      vm.cells = vm.$_.concat(vm.cells)
       console.log(vm.cells);
       //this.$set(this.cells)
 
-      console.log(vm.cells, s, id)
-      return;
-      const req = await this.$axios.$post("/", {
+      //console.log(vm.cells, s, id)
+      //return;
+      const response = await this.$axios.$post("/", {
         action: "delete",
         params: {id}
       })
-      if(req.status === true){
-        var s = this.$_.remove(this.cells, 'id='+id)
-        console.log(this.cells, s)
+      if(response.status === true){
+        vm.$_.remove(vm.cells, {id})
+        vm.cells = vm.$_.concat(vm.cells)
+        //var s = this.$_.remove(this.cells, 'id='+id)
+        //console.log(this.cells)
         // this.cells.forEach((el, i)=>{
         //  console.log(i, el);
 
