@@ -28,6 +28,7 @@ export default {
     // { src: '~plugins/nuxt-quill-plugin', ssr: false }
     { src: '~/plugins/lodash.js' },
     { src: '~/plugins/vue-tagsinput.js' },
+    { src: '~/plugins/vue-filter-date-format.js' },
   ],
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,

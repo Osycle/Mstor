@@ -1,16 +1,18 @@
 
 
-$color-1: #202b60;
-$color-2: #6881ff;
-$color-3: #7fffd4;
+$color-1: var(--color-1);
+$color-2: var(--color-2);
+$color-3: var(--color-3);
 
 
-$color-gray-1: #f2f2f2;
-$color-gray-2: #efefef;
-$color-gray-3: #cccccc; 
-$color-gray-4: #9BA1A5; // #05141F opacity 40% (old color #999)
-$color-gray-5: #697279; // #05141F opacity 60% (old color #666)
-$color-gray-6: #37434C; // #05141F opacity 80% (old color #1f1f1f)
+$color-gray-1: var(--color-gray-1);
+$color-gray-2: var(--color-gray-2);
+$color-gray-3: var(--color-gray-3);
+$color-gray-4: var(--color-gray-4);
+$color-gray-5: var(--color-gray-5);
+$color-gray-6: var(--color-gray-6);
+
+$border-def: var(--border-def);
 
 $color-red: #d71515;
 

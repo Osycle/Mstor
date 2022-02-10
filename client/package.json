@@ -10,11 +10,12 @@
   },
   "dependencies": {
     "@fancyapps/ui": "^4.0.21",
+    "@johmun/vue-tags-input": "^2.1.0",
     "@nuxt/http": "^0.5.11",
     "@nuxtjs/axios": "^5.12.0",
     "@nuxtjs/pwa": "^3.3.5",
     "@nuxtjs/style-resources": "^1.2.1",
-    "@voerro/vue-tagsinput": "^2.7.1",
+    "@seriouslag/vue-tagsinput": "^4.0.1",
     "@vuejs-community/vue-filter-date-format": "^1.6.3",
     "core-js": "^3.19.3",
     "lodash": "^4.17.21",

@@ -1,5 +1,4 @@
+import Vue from 'vue';
+import TagsInputPlugin from '@seriouslag/vue-tagsinput';
 
-
-// import VoerroTagsInput from '@voerro/vue-tagsinput';
-// console.log(VoerroTagsInput);
-// //Vue.component('tags-input', VoerroTagsInput);
+Vue.use(TagsInputPlugin);
