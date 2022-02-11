@@ -6,6 +6,7 @@
 @import "_helper";
 @import "_common";
 @import "_fancybox";
+//@import "_variables";
 
 
 
@@ -22,10 +23,6 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-
-
-
-
 }
 .cell{
   flex-shrink: 0;
@@ -95,7 +92,7 @@
 
 }
 .cell-wrapper{
-  border: var(--border-def);
+  @include shadow-border;
   padding: 8px;
   color: white;
   width: 130px;
@@ -103,6 +100,9 @@
   background-color: $color-1;
   //display: flex;
   //align-items: center;
+  &:after{
+    box-shadow: 5px 5px 0px -1px black, 0px 0px 0px 3px black;
+  }
 }
 .cell-title{
   font-size: 13px;
@@ -123,18 +123,177 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 5px 8px;
-    transition: 0.3s ease;
+    padding: 4px 8px;
+    transition: 0.2s ease;
+    @include hover-outshadow();
     svg{
-      width: 30px;
-      transition: 0.3s ease;
+      width: 25px;
+      transition: 0.2s ease;
       fill: $color-1;
     }
-    &:hover{
-      background-color: $color-1;
-      svg{
-        fill: white;
-      }
+  }
+}
+
+.tags-append{
+  //display: none;
+  //margin-top: 10px;
+}
+.tags-input {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  span{
+
+  }
+  input{
+    flex: 1;
+    background-color: white;
+    border: none;
+    height: 35px;
+    color: $color-1;
+    font-weight: 600;
+    margin-top: 15px;
+    margin-left: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    //border-bottom: 1px solid white;
+
+    font-size: 13px;
+    &::placeholder{
+      color: inherit;
+    }
+    &:focus{
+      outline: none;
     }
   }
+}
+input, textarea{
+  box-shadow: 5px 5px 0px 2px black, 0px 0px 0px 3px black;
+  transition: 0.2s ease;
+  &:focus{
+    transform: translateY(-2px);
+    box-shadow: 10px 10px 0px -5px black, -0px -0px 0px 3px black;
+  }
+}
+
+
+.tags-input-wrapper-default {
+  padding: 0 0;
+  //@include shadow-border();
+  &.active {
+    border-color: $color-3;
+  }
+}
+
+
+.tags-input-remove {
+  cursor: pointer;
+  position: absolute;
+  display: inline-block;
+  right: 2px;
+  top: 2px;
+  padding: .5em;
+  overflow: hidden;
+  &:focus {
+    outline: none
+  }
+  &:after, &:before {
+    content: "";
+    position: absolute;
+    width: 75%;
+    left: .15em;
+    background: $color-1;
+    height: 2px;
+    margin-top: -1px;
+  }
+  &:before {
+    transform: rotate(45deg)
+  }
+  &:after {
+    transform: rotate(-45deg)
+  }
+}
+
+
+
+.tags-input-badge {
+  position: relative;
+  display: inline-block;
+  padding-right: 20px;
+  padding-left: 10px;
+  height: 35px;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  //overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 15px;
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.tags-input-badge-pill {
+
+  @include shadow-border();
+  &.disabled {
+    padding-right: .6em;
+  }
+}
+
+
+
+.tags-input-badge-selected-default {
+  color: $color-1;
+  background-color: white;
+}
+
+.typeahead-hide-btn {
+  color: #999!important;
+  font-style: italic
+}
+
+.typeahead-badges{
+  display: flex;
+  position: absolute;
+  top: 100%;
+  margin: 0;
+  margin-top: 10px;
+  font-size: 10px;
+  .tags-input-badge{
+    font-size: 12px;
+    margin-top: 5px;
+    margin-right: 5px;
+    height: 25px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+}
+
+.typeahead-dropdown {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  width: 100%;
+  z-index: 1000;
+  li {
+    padding: .25em 1em;
+    cursor: pointer
+  }
+}
+
+.tags-input-typeahead-item-default {
+  color: #fff;
+  background-color: #343a40
+}
+
+.tags-input-typeahead-item-highlighted-default {
+  color: $color-1;
+  background-color: white;
 }

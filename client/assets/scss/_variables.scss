@@ -16,3 +16,33 @@ $border-def: var(--border-def);
 
 $color-red: #d71515;
 
+@mixin hover-outshadow{
+  transition: 0.2s ease;
+  backface-visibility: hidden;
+  @include shadow-border();
+  &:hover{
+    cursor: pointer;
+    animation: var(--animation-sir);
+    box-shadow: inset -1px -1px 0px 1px rgba(black, 0.5);
+    transform: translateY(-3px);
+    &:after{
+      box-shadow: 10px 10px 0px -5px black, -10px -10px 0px 3px black;
+    }
+  }
+}
+@mixin shadow-border{
+  &:after{
+    transition: 0.2s ease;
+    display: inline-block;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
+    box-shadow: 
+          5px 5px 0px 2px black, 
+          0px 0px 0px 3px black;
+  }
+}

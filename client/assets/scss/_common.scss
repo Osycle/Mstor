@@ -14,23 +14,23 @@
   --color-gray-5: #697279;
   --color-gray-6: #37434C;
   --border-def: 3px solid var(--color-black);
-  --animation-sir: shadow-in-rotate 0.4s linear 0s infinite;
+  --animation-sir: shadow-in-rotate 2s linear 0s infinite;
   --animation-sor: shadow-out-rotate 0.4s linear 0s infinite;
 }
 
 /* ANIMAIONS */
 @keyframes shadow-in-rotate{
   0% {
-    box-shadow: inset -1px -1px 0px 0px black;
+    box-shadow: inset -1px -1px 0px 1px rgba(black, 0.5);
   }
   25% {
-    box-shadow: inset 1px -1px 0px 0px black;
+    box-shadow: inset 1px -1px 0px 1px rgba(black, 0.5);
   }
   50% {
-    box-shadow: inset 1px 1px 0px 0px black;
+    box-shadow: inset 1px 1px 0px 1px rgba(black, 0.5);
   }
   75% {
-    box-shadow: inset -1px 1px 0px 0px black;
+    box-shadow: inset -1px 1px 0px 1px rgba(black, 0.5);
   }
 }
 @keyframes shadow-out-rotate{
