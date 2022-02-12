@@ -48,7 +48,15 @@ if($arr["action"] === "insert"){
 	$params = $arr["params"];
 	$title = clear_str($params["title"]);
 	$description = clear_str($params["description"]);
-	$tags = clear_str($params["tags"]);
+	$tags = json_encode($params["tags"]);
+	for ($i=0; $i < count($params["tags"]); $i++) { 
+		echo $params["tags"][$i];
+	}
+	var_dump($params["tags"]);	
+	//print_r($tags);
+	//$sql = "INSERT INTO tags (name) VALUES ('$tags')";
+	//$response = mysqli_query($link, $sql);
+	return;
 	$sql = "INSERT INTO cells (title, description, tags) VALUES ('$title', '$description', '$tags')";
 	$response = mysqli_query($link, $sql);
 	//echo $response;
@@ -90,13 +98,13 @@ if($arr["action"] === "fetch"){
 	echo $row;
 }
 
-// $sql = 'SELECT * FROM cells';
+// $sql = "SELECT * FROM cells WHERE tags REGEXP '^12$'";
 
 // $result = mysqli_query($link, $sql);
 
-// mysqli_close($link);
-// // Обрабатываем результат
-// $row = mysqli_fetch_all($result, MYSQLI_ASSOC);
-// $row = json_encode($row);
+// // mysqli_close($link);
+// // // Обрабатываем результат
+//  $row = mysqli_fetch_all($result, MYSQLI_ASSOC);
+//  $row = json_encode($row);
 
-//echo $row;
+// echo $row;

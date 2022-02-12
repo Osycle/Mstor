@@ -18,14 +18,16 @@
             <div class="tags-append">
               <tags-input element-id="tags"
                 v-model="selectedTags"
+                :input-id="'add-tags-input'"
                 :existing-tags="[
-                    { key: 'web-development', value: 'Web Development' },
-                    { key: 'php', value: 'PHP' },
-                    { key: 'javascript', value: 'JavaScript' },
+
                 ]"
                 placeholder="Добавить категорию"
+                :discard-search-text="'Отменить результаты поиска'"
+                :id-field="'value'"
+                
                 :typeahead="true"
-                typeahead-hide-discard="false"
+                :typeahead-hide-discard="false"
                 ></tags-input>
               </div>
           </div>
@@ -51,9 +53,25 @@
         selectedTags: null,
         title: "",
         description: "",
-        tags: "",
+        tags: [],
+        ext: [
+          { key: 'asd', value: 'Web Development' },
+          { key: 'olo', value: 'PHP' },
+          { key: 'javascript', value: 'JavaScript' },
+        ]
       }
-    },    
+    },
+    watch: {
+      selectedTags(items){
+        this.tags = []
+        items.forEach(item => {
+          this.tags.push(item.value)
+          //console.log(item);
+        });
+        //this.tags
+        //console.log(s, 11111111);
+      }
+    },
     computed: {
     },
     components: {
@@ -78,6 +96,7 @@
       },
     },
     mounted(){
+      
       console.log(this.modalData)
       console.log("Modal mounted")
     }
