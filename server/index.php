@@ -9,6 +9,9 @@ const DB_LOGIN = "root";
 const DB_PASSWORD = "";
 const DB_NAME = "test_mstor";
 
+$tbl_name_cells = "cells";
+$tbl_name_tags = "tags";
+
 $link = mysqli_connect(DB_HOST, DB_LOGIN, DB_PASSWORD, DB_NAME) or die(mysqli_connect_error());
 
 /* 
@@ -16,23 +19,48 @@ $link = mysqli_connect(DB_HOST, DB_LOGIN, DB_PASSWORD, DB_NAME) or die(mysqli_co
 */
 
 function clear_str($str){
-	global $link;
+	global $link, $tbl_name_cells, $tbl_name_tags;
 	$str = trim(strip_tags($str));
 	return mysqli_real_escape_string($link, $str);
 }
 
-function giveId($id){
-	global $link;
-	$sql = "SELECT *FROM cells WHERE id =$id";
+function give_id($id, $table, $array){
+	global $link, $tbl_name_cells, $tbl_name_tags;
+	$sql = "SELECT * FROM $table WHERE id = $id";
 	$result = mysqli_query($link, $sql);
 	//echo $sql;
 	if($result){
-		$row = mysqli_fetch_all($result, MYSQLI_ASSOC);
+		if($array)
+			$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+		else
+			$row = mysqli_fetch_all($result, MYSQLI_ASSOC);
 		return $row;
 	}else {
 		return $result;
 	}
 }
+function tag_add($tag){
+	global $link, $tbl_name_tags;
+	$sql = "INSERT INTO $tbl_name_tags (name) VALUES ('$tag')";
+	$response = mysqli_query($link, $sql);
+	if($response){
+		return give_id(mysqli_insert_id($link), $tbl_name_tags, true);
+	}else{
+		return false;	
+	}
+}
+
+function tag_match_name($tag){
+	global $link, $tbl_name_tags;
+	$sql = "SELECT * FROM $tbl_name_tags WHERE name = '$tag'";
+	$response = mysqli_query($link, $sql);
+	if($response){
+		return mysqli_fetch_array($response, MYSQLI_ASSOC);
+	}else{
+		return false;	
+	}
+}
+
 
 /* 
 	Сохранение записи в БД 
@@ -46,23 +74,33 @@ $arr = json_decode($json, true);
 
 if($arr["action"] === "insert"){
 	$params = $arr["params"];
-	$title = clear_str($params["title"]);
 	$description = clear_str($params["description"]);
-	$tags = json_encode($params["tags"]);
+	//$tags = json_encode($params["tags"]);
+	$tags = [];
 	for ($i=0; $i < count($params["tags"]); $i++) { 
-		echo $params["tags"][$i];
+		//$tags[] = tag_add($params["tags"][$i]);
+		$current_tag = tag_match_name($params["tags"][$i]);
+		if($current_tag)
+			$tags[] = $current_tag;
+		else{
+			$tags[] = tag_add($params["tags"][$i]);
+		}
 	}
-	var_dump($params["tags"]);	
+	//$z = tag_add($tag);
+	print_r($tags);
+	//$tags = implode("|", $tags);
+	return;
+	//var_dump($tags);	
 	//print_r($tags);
 	//$sql = "INSERT INTO tags (name) VALUES ('$tags')";
 	//$response = mysqli_query($link, $sql);
-	return;
-	$sql = "INSERT INTO cells (title, description, tags) VALUES ('$title', '$description', '$tags')";
+	//return;
+	$sql = "INSERT INTO $tbl_name_cells (description, tags) VALUES ('$description', '$tags')";
 	$response = mysqli_query($link, $sql);
 	//echo $response;
 	if($response){
 		// Получить последний добавленный элемент
-		$cell = giveId(mysqli_insert_id($link));
+		$cell = give_id(mysqli_insert_id($link), $tbl_name_cells);
 		//echo $cell.'asd';
 		//mysqli_close($link);
 		if($cell){
@@ -81,7 +119,7 @@ if($arr["action"] === "insert"){
 if($arr["action"] === "delete"){
 	$params = $arr["params"];
 	$id = clear_str($params["id"]);
-	$sql = "DELETE FROM cells WHERE id = '$id'";
+	$sql = "DELETE FROM $tbl_name_cells WHERE id = '$id'";
 	$res = mysqli_query($link, $sql);
 	if($res){
 		$arr = array('status' => $res);
@@ -89,7 +127,7 @@ if($arr["action"] === "delete"){
 	}
 }
 if($arr["action"] === "fetch"){
-	$sql = 'SELECT * FROM cells';
+	$sql = "SELECT * FROM $tbl_name_cells";
 	$result = mysqli_query($link, $sql);
 	mysqli_close($link);
 
