@@ -24,7 +24,7 @@ function clear_str($str){
 	return mysqli_real_escape_string($link, $str);
 }
 
-function give_id($id, $table, $array){
+function give_id($id, $table, $array = false){
 	global $link, $tbl_name_cells, $tbl_name_tags;
 	$sql = "SELECT * FROM $table WHERE id = $id";
 	$result = mysqli_query($link, $sql);
@@ -41,6 +41,7 @@ function give_id($id, $table, $array){
 }
 function tag_add($tag){
 	global $link, $tbl_name_tags;
+	$tag = clear_str($tag);
 	$sql = "INSERT INTO $tbl_name_tags (name) VALUES ('$tag')";
 	$response = mysqli_query($link, $sql);
 	if($response){
@@ -78,24 +79,27 @@ if($arr["action"] === "insert"){
 	//$tags = json_encode($params["tags"]);
 	$tags = [];
 	for ($i=0; $i < count($params["tags"]); $i++) { 
-		//$tags[] = tag_add($params["tags"][$i]);
 		$current_tag = tag_match_name($params["tags"][$i]);
-		if($current_tag)
+		if($current_tag){
 			$tags[] = $current_tag;
+		}
 		else{
 			$tags[] = tag_add($params["tags"][$i]);
 		}
 	}
-	//$z = tag_add($tag);
-	print_r($tags);
-	//$tags = implode("|", $tags);
-	return;
+	
+	for ($i=0; $i < count($tags); $i++) { 
+		$tags_ids[] = $tags[$i]['id'];
+	}
+	$tags_ids = implode("|", $tags_ids);
+	//print_r($tags_ids);
+	//return;
 	//var_dump($tags);	
 	//print_r($tags);
 	//$sql = "INSERT INTO tags (name) VALUES ('$tags')";
 	//$response = mysqli_query($link, $sql);
 	//return;
-	$sql = "INSERT INTO $tbl_name_cells (description, tags) VALUES ('$description', '$tags')";
+	$sql = "INSERT INTO $tbl_name_cells (description, tags) VALUES ('$description', '$tags_ids')";
 	$response = mysqli_query($link, $sql);
 	//echo $response;
 	if($response){
