@@ -6,6 +6,11 @@
       <div class="cells">
         <div class="cell" v-for="(cell, key) in cells" :key="key">
           <div class="cell-wrapper">
+            <div class="tags-content">
+              <span v-for="(item, key) in cell.tags.split('|')" :key="key">
+                {{item}}
+              </span>
+            </div>
             <div class="date-content">
               {{ new Date(cell.date_time) | dateFormat('D MMMM YYYY')}}
             </div>
@@ -59,12 +64,12 @@ export default {
   },
   async asyncData(context){
     try{
-      const cells = await context.store.dispatch("trans/query", {
+      const data = await context.store.dispatch("trans/query", {
         action: "fetch"
       })
       //console.log(cells);
       return {
-        cells
+        cells: data.cells,
       }
     }catch(e){
       context.error(e);

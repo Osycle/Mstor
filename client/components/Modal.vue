@@ -54,11 +54,7 @@
         title: "",
         description: "",
         tags: [],
-        ext: [
-          { key: 'asd', value: 'Web Development' },
-          { key: 'olo', value: 'PHP' },
-          { key: 'javascript', value: 'JavaScript' },
-        ]
+        ext: []
       }
     },
     watch: {
@@ -66,10 +62,7 @@
         this.tags = []
         items.forEach(item => {
           this.tags.push(item.value)
-          //console.log(item);
         });
-        //this.tags
-        //console.log(s, 11111111);
       }
     },
     computed: {
