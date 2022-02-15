@@ -18,12 +18,6 @@ class Lib{
 	public $tbl_name_cells = "cells";
 	public $tbl_name_tags = "tags";
 
-	function my_fetch($result, $array = false){
-		if($array)
-			return mysqli_fetch_array($result, MYSQLI_ASSOC);
-		else
-			return mysqli_fetch_all($result, MYSQLI_ASSOC);
-	}
 	function clear_str($str){
 		$str = trim(strip_tags($str));
 		return mysqli_real_escape_string($this->link, $str);
@@ -33,7 +27,7 @@ class Lib{
 		$sql = "INSERT INTO $this->tbl_name_tags (name) VALUES ('$tag')";
 		$response = mysqli_query($this->link, $sql);
 		if($response){
-			return $this->give_tag_id(mysqli_insert_id($this->link), true);
+			return $this->give_tag_id(mysqli_insert_id($this->link));
 		}else{
 			printf("Ошибка тег не добавлен %s\n", mysqli_error($this->link));
 		}
@@ -47,21 +41,31 @@ class Lib{
 			return false;	
 		}
 	}
-	function give_cell_id($id, $array = false){
-		$sql = "SELECT * FROM $this->tbl_name_cells WHERE id=$id";
+	function give_cell_id($id){
+		$ids_array = explode(",", $id);
+		$sql = "SELECT * FROM $this->tbl_name_cells WHERE id IN ('$id')";
 		$result = mysqli_query($this->link, $sql);
 		if($result){
-			return $this->my_fetch($result, $array);
+			if(count($ids_array) == 1)
+				return mysqli_fetch_array($result, MYSQLI_ASSOC);
+			else
+				return mysqli_fetch_all($result, MYSQLI_ASSOC);
 		}else {
 			printf("give_cell_id %s\n", mysqli_error($this->link));
 			return false;
 		}
 	}
-	function give_tag_id($id, $array = false){
-		$sql = "SELECT * FROM $this->tbl_name_tags WHERE id = $id";
+	function give_tag_id($id){
+		if(!$id)
+			return;
+		$ids_array = explode(",", $id);
+		$sql = "SELECT * FROM $this->tbl_name_tags WHERE id IN ($id)";
 		$result = mysqli_query($this->link, $sql);
 		if($result){
-			return $this->my_fetch($result, $array);
+			if(count($ids_array) == 1)
+				return mysqli_fetch_array($result, MYSQLI_ASSOC);
+			else
+				return mysqli_fetch_all($result, MYSQLI_ASSOC);
 		}else {
 			printf("give_tag_id %s\n", mysqli_error($this->link));
 			return false;
@@ -71,13 +75,16 @@ class Lib{
 		$sql = "SELECT * FROM $table";
 		$result = mysqli_query($this->link, $sql);	
 		if($result){
-			return $this->my_fetch($result, $array);
+			if($array)
+				return mysqli_fetch_array($result, MYSQLI_ASSOC);
+			else
+				return mysqli_fetch_all($result, MYSQLI_ASSOC);
 		}else {
 			printf("give_table %s\n", mysqli_error($this->link));
 			return false;
 		}
 	}
-	function remove_cell($id, $array = false){
+	function remove_cell($id){
 		$id = $this->clear_str($id);
 		$sql = "DELETE FROM $this->tbl_name_cells WHERE id = $id";
 		$response = mysqli_query($this->link, $sql);
@@ -126,16 +133,24 @@ if($arr["action"] === "insert"){
 	for ($i=0; $i < count($tags); $i++) { 
 		$tags_ids[] = $tags[$i]['id'];
 	}
-	$tags_ids = implode("|", $tags_ids);
+	$tags_ids = implode(",", $tags_ids);
 	$sql = "INSERT INTO $lib->tbl_name_cells (description, tags) VALUES ('$description', '$tags_ids')";
 	$response = mysqli_query($link, $sql);
 	if($response){
 		// Получить последний добавленный элемент
 		$cell = $lib->give_cell_id(mysqli_insert_id($link));
+		//$tags = explode(",", $cell['tags']);
+		$cell['tags'] = $lib->give_tag_id($cell['tags']);
+		//print_r($cell['tags']);
+		// for ($i=0; $i < count($tags); $i++) { 
+		// 	$cell['tags'][] = $lib->give_tag_id($tags[$i]);
+		// }
+		//print_r($cell['tags']);
+		//give_tag_id
 		if($cell){
 			$arr = array(
 				'status' => $response,
-				'cell' => $cell[0]
+				'cell' => $cell
 			);
 			echo json_encode($arr);
 		}else {
@@ -154,11 +169,16 @@ if($arr["action"] === "delete"){
 	));
 }
 if($arr["action"] === "fetch"){
-	$data = $lib->give_table($lib->tbl_name_cells);
-	if($data){
+	$cells = $lib->give_table($lib->tbl_name_cells);
+	for ($i=0; $i < count($cells); $i++) { 		
+		if(!count($cells[$i]['tags']))
+			return;
+		$cells[$i]['tags'] = $lib->give_tag_id($cells[$i]['tags']);
+	}
+	if($cells){
 		echo json_encode(array(
 			'status' => true,
-			'cells' => $data
+			'cells' => $cells
 		));
 	}else {
 		printf("Ошибка в fetch");

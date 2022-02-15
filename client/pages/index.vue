@@ -7,9 +7,10 @@
         <div class="cell" v-for="(cell, key) in cells" :key="key">
           <div class="cell-wrapper">
             <div class="tags-content">
-              <span v-for="(item, key) in cell.tags.split('|')" :key="key">
+              {{cell.tags}}
+              <!-- <span v-for="(item, key) in cell.tags" :key="key">
                 {{item}}
-              </span>
+              </span> -->
             </div>
             <div class="date-content">
               {{ new Date(cell.date_time) | dateFormat('D MMMM YYYY')}}
@@ -51,6 +52,7 @@ export default {
     return {
       description_content: null,
       test: [],
+      data: null,
       modal_open_status: false,
       cells: []
     }
@@ -69,6 +71,7 @@ export default {
       })
       //console.log(cells);
       return {
+        data: data,
         cells: data.cells,
       }
     }catch(e){
