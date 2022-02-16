@@ -22,17 +22,7 @@ class Lib{
 		$str = trim(strip_tags($str));
 		return mysqli_real_escape_string($this->link, $str);
 	}
-	function tag_add($tag){
-		$tag = $this->clear_str($tag);
-		$sql = "INSERT INTO $this->tbl_name_tags (name) VALUES ('$tag')";
-		$response = mysqli_query($this->link, $sql);
-		if($response){
-			return $this->give_tag_id(mysqli_insert_id($this->link));
-		}else{
-			printf("Ошибка тег не добавлен %s\n", mysqli_error($this->link));
-		}
-	}
-	function tag_match_name($tag){
+	function match_tag_name($tag){
 		$sql = "SELECT * FROM $this->tbl_name_tags WHERE name = '$tag'";
 		$response = mysqli_query($this->link, $sql);
 		if($response){
@@ -95,6 +85,54 @@ class Lib{
 			return false;
 		}
 	}
+	function add_tag($tag){
+		$tag = $this->clear_str($tag);
+		$sql = "INSERT INTO $this->tbl_name_tags (name) VALUES ('$tag')";
+		$response = mysqli_query($this->link, $sql);
+		if($response){
+			return $this->give_tag_id(mysqli_insert_id($this->link));
+		}else{
+			printf("Ошибка тег не добавлен %s\n", mysqli_error($this->link));
+		}
+	}
+	function add_cell($description, $tags){
+		//$tags_ids = [];
+		$f_tags = [];
+		//if($tags){
+		for ($i=0; $i < count($tags); $i++) { 
+				$current_tag = $this->match_tag_name($tags[$i]);
+			if($current_tag){
+				$f_tags[] = $current_tag;
+			}else{
+				$f_tags[] = $this->add_tag($tags[$i]);
+			}
+		}
+		for ($i=0; $i < count($f_tags); $i++) { 
+			$tags_ids[] = $f_tags[$i]['id'];
+		}
+		$tags_ids = implode(",", $tags_ids);
+		//}
+
+		$sql = "INSERT INTO $this->tbl_name_cells (description, tags_ids) VALUES ('$description', '$tags_ids')";
+		$response = mysqli_query($this->link, $sql);
+		if($response){
+			// Получить последний добавленный элемент
+			$cell = $this->give_cell_id(mysqli_insert_id($this->link));
+			$cell['tags'] = $this->give_tag_id($cell['tags_ids']);
+			if($cell){
+				$arr = array(
+					'status' => $response,
+					'cell' => $cell
+				);
+				return $arr;
+			}else {
+				printf("Ошибка при возвращении поледнего добавленного  %s\n", mysqli_error($this->link));
+			}
+		}else {
+			printf("Ошибка при добавлении  %s\n", mysqli_error($this->link));
+			//echo 'Ошибка при добавлении \n'.$response;
+		}
+	}
 }
 
 $lib = new Lib();
@@ -119,47 +157,10 @@ $arr = json_decode($json, true);
 if($arr["action"] === "insert"){
 	$params = $arr["params"];
 	$description = $lib->clear_str($params["description"]);
-	//$tags = json_encode($params["tags"]);
-	$tags = [];
-	for ($i=0; $i < count($params["tags"]); $i++) { 
-		$current_tag = $lib->tag_match_name($params["tags"][$i]);
-		if($current_tag){
-			$tags[] = $current_tag;
-		}else{
-			$tags[] = $lib->tag_add($params["tags"][$i]);
-		}
-	}
-	
-	for ($i=0; $i < count($tags); $i++) { 
-		$tags_ids[] = $tags[$i]['id'];
-	}
-	$tags_ids = implode(",", $tags_ids);
-	$sql = "INSERT INTO $lib->tbl_name_cells (description, tags) VALUES ('$description', '$tags_ids')";
-	$response = mysqli_query($link, $sql);
-	if($response){
-		// Получить последний добавленный элемент
-		$cell = $lib->give_cell_id(mysqli_insert_id($link));
-		//$tags = explode(",", $cell['tags']);
-		$cell['tags'] = $lib->give_tag_id($cell['tags']);
-		//print_r($cell['tags']);
-		// for ($i=0; $i < count($tags); $i++) { 
-		// 	$cell['tags'][] = $lib->give_tag_id($tags[$i]);
-		// }
-		//print_r($cell['tags']);
-		//give_tag_id
-		if($cell){
-			$arr = array(
-				'status' => $response,
-				'cell' => $cell
-			);
-			echo json_encode($arr);
-		}else {
-			printf("Ошибка при возвращении поледнего добавленного  %s\n", mysqli_error($link));
-		}
-	}else {
-		printf("Ошибка при добавлении  %s\n", mysqli_error($link));
-		//echo 'Ошибка при добавлении \n'.$response;
-	}
+	$tags = $params["tags"];
+
+	//print_r($tags);
+	die(json_encode($lib->add_cell($description, $tags)));
 }
 if($arr["action"] === "delete"){
 	$params = $arr["params"];
@@ -171,9 +172,9 @@ if($arr["action"] === "delete"){
 if($arr["action"] === "fetch"){
 	$cells = $lib->give_table($lib->tbl_name_cells);
 	for ($i=0; $i < count($cells); $i++) { 		
-		if(!count($cells[$i]['tags']))
+		if(!count($cells[$i]['tags_ids']))
 			return;
-		$cells[$i]['tags'] = $lib->give_tag_id($cells[$i]['tags']);
+		$cells[$i]['tags'] = $lib->give_tag_id($cells[$i]['tags_ids']);
 	}
 	if($cells){
 		echo json_encode(array(

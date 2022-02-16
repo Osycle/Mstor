@@ -7,10 +7,9 @@
         <div class="cell" v-for="(cell, key) in cells" :key="key">
           <div class="cell-wrapper">
             <div class="tags-content">
-              {{cell.tags}}
-              <!-- <span v-for="(item, key) in cell.tags" :key="key">
-                {{item}}
-              </span> -->
+              <span v-for="(item, key) in cell.tags" :key="key" class="tags-item">
+                {{item.name}}
+              </span>
             </div>
             <div class="date-content">
               {{ new Date(cell.date_time) | dateFormat('D MMMM YYYY')}}
