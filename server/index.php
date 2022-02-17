@@ -98,20 +98,20 @@ class Lib{
 	function add_cell($description, $tags){
 		//$tags_ids = [];
 		$f_tags = [];
-		//if($tags){
-		for ($i=0; $i < count($tags); $i++) { 
-				$current_tag = $this->match_tag_name($tags[$i]);
-			if($current_tag){
-				$f_tags[] = $current_tag;
-			}else{
-				$f_tags[] = $this->add_tag($tags[$i]);
+		if($tags){
+			for ($i=0; $i < count($tags); $i++) { 
+					$current_tag = $this->match_tag_name($tags[$i]);
+				if($current_tag){
+					$f_tags[] = $current_tag;
+				}else{
+					$f_tags[] = $this->add_tag($tags[$i]);
+				}
 			}
+			for ($i=0; $i < count($f_tags); $i++) { 
+				$tags_ids[] = $f_tags[$i]['id'];
+			}
+			$tags_ids = implode(",", $tags_ids);
 		}
-		for ($i=0; $i < count($f_tags); $i++) { 
-			$tags_ids[] = $f_tags[$i]['id'];
-		}
-		$tags_ids = implode(",", $tags_ids);
-		//}
 
 		$sql = "INSERT INTO $this->tbl_name_cells (description, tags_ids) VALUES ('$description', '$tags_ids')";
 		$response = mysqli_query($this->link, $sql);
