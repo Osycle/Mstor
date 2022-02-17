@@ -45,17 +45,15 @@ class Lib{
 			return false;
 		}
 	}
-	function give_tag_id($id){
-		if(!$id)
+	function give_tag_id($ids){
+		$ids_arr = explode(",", $ids);
+		if(strlen($ids_arr[0]) == 0)
 			return;
-		$ids_array = explode(",", $id);
-		$sql = "SELECT * FROM $this->tbl_name_tags WHERE id IN ($id)";
+		$sql = "SELECT * FROM $this->tbl_name_tags WHERE id IN ($ids)";
+		//print_r($sql);
 		$result = mysqli_query($this->link, $sql);
 		if($result){
-			if(count($ids_array) == 1)
-				return mysqli_fetch_array($result, MYSQLI_ASSOC);
-			else
-				return mysqli_fetch_all($result, MYSQLI_ASSOC);
+			return mysqli_fetch_all($result, MYSQLI_ASSOC);
 		}else {
 			printf("give_tag_id %s\n", mysqli_error($this->link));
 			return false;
@@ -110,9 +108,9 @@ class Lib{
 			for ($i=0; $i < count($f_tags); $i++) { 
 				$tags_ids[] = $f_tags[$i]['id'];
 			}
+			$this->update_tags_cells_ids($tags_ids);
 			$tags_ids = implode(",", $tags_ids);
 		}
-
 		$sql = "INSERT INTO $this->tbl_name_cells (description, tags_ids) VALUES ('$description', '$tags_ids')";
 		$response = mysqli_query($this->link, $sql);
 		if($response){
@@ -132,6 +130,14 @@ class Lib{
 			printf("Ошибка при добавлении  %s\n", mysqli_error($this->link));
 			//echo 'Ошибка при добавлении \n'.$response;
 		}
+	}
+	function update_tags_cells_ids($tags_ids){
+		return;
+		// for ($i=0; $i < count($f_tags); $i++) { 
+		// 	$tags_ids[] = $f_tags[$i]['id'];
+		// }
+		// $sql = "UPDATE $this->tbl_name_tags (description, tags_ids) VALUES ('$description', '$tags_ids')";
+		// $response = mysqli_query($this->link, $sql);
 	}
 }
 
@@ -186,7 +192,8 @@ if($arr["action"] === "fetch"){
 	}
 
 }
-
+//$asd = explode(",", ",23");
+//print_r(strlen($asd[0]));
 // $sql = "SELECT * FROM cells WHERE tags REGEXP '^12$'";
 
 // $result = mysqli_query($link, $sql);
