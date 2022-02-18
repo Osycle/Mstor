@@ -47,12 +47,13 @@ class Lib{
 	}
 	function give_tag_id($ids){
 		$ids_arr = explode(",", $ids);
+		
 		if(strlen($ids_arr[0]) == 0)
 			return;
 		$sql = "SELECT * FROM $this->tbl_name_tags WHERE id IN ($ids)";
-		//print_r($sql);
 		$result = mysqli_query($this->link, $sql);
 		if($result){
+			//print_r(mysqli_fetch_array($result, MYSQLI_ASSOC));
 			return mysqli_fetch_all($result, MYSQLI_ASSOC);
 		}else {
 			printf("give_tag_id %s\n", mysqli_error($this->link));
@@ -96,26 +97,34 @@ class Lib{
 	function add_cell($description, $tags){
 		//$tags_ids = [];
 		$f_tags = [];
-		if($tags){
+		
+		if(count($tags)){
 			for ($i=0; $i < count($tags); $i++) { 
 					$current_tag = $this->match_tag_name($tags[$i]);
 				if($current_tag){
 					$f_tags[] = $current_tag;
 				}else{
-					$f_tags[] = $this->add_tag($tags[$i]);
+					$f_tags[] = $this->add_tag($tags[$i])[0];
 				}
 			}
 			for ($i=0; $i < count($f_tags); $i++) { 
 				$tags_ids[] = $f_tags[$i]['id'];
 			}
-			$this->update_tags_cells_ids($tags_ids);
+			//$this->update_tags_cells_ids($tags_ids);
 			$tags_ids = implode(",", $tags_ids);
+			//print_r($f_tags);
 		}
-		$sql = "INSERT INTO $this->tbl_name_cells (description, tags_ids) VALUES ('$description', '$tags_ids')";
+		//print_r($tags_ids);
+		$sql = 
+<<<EOT
+			INSERT INTO $this->tbl_name_cells (description, tags_ids) 
+			VALUES ('$description', '$tags_ids')
+EOT;
 		$response = mysqli_query($this->link, $sql);
 		if($response){
 			// Получить последний добавленный элемент
 			$cell = $this->give_cell_id(mysqli_insert_id($this->link));
+			//print_r($cell);
 			$cell['tags'] = $this->give_tag_id($cell['tags_ids']);
 			if($cell){
 				$arr = array(
@@ -165,7 +174,6 @@ if($arr["action"] === "insert"){
 	$description = $lib->clear_str($params["description"]);
 	$tags = $params["tags"];
 
-	//print_r($tags);
 	die(json_encode($lib->add_cell($description, $tags)));
 }
 if($arr["action"] === "delete"){
