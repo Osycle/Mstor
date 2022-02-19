@@ -89,7 +89,7 @@ class Lib{
 		$sql = "INSERT INTO $this->tbl_name_tags (name) VALUES ('$tag')";
 		$response = mysqli_query($this->link, $sql);
 		if($response){
-			return $this->give_tag_id(mysqli_insert_id($this->link));
+			return $this->give_tag_id(mysqli_insert_id($this->link))[0];
 		}else{
 			printf("Ошибка тег не добавлен %s\n", mysqli_error($this->link));
 		}
@@ -104,7 +104,7 @@ class Lib{
 				if($current_tag){
 					$f_tags[] = $current_tag;
 				}else{
-					$f_tags[] = $this->add_tag($tags[$i])[0];
+					$f_tags[] = $this->add_tag($tags[$i]);
 				}
 			}
 			for ($i=0; $i < count($f_tags); $i++) { 
