@@ -15,15 +15,17 @@ $link = mysqli_connect(DB_HOST, DB_LOGIN, DB_PASSWORD, DB_NAME) or die(mysqli_co
 
 class Lib{
 	public $link;
-	public $tbl_name_cells = "cells";
-	public $tbl_name_tags = "tags";
+
+	public $tbl_cells, $tbl_tags, $tbl_ids_ct;
+	
 
 	function clear_str($str){
 		$str = trim(strip_tags($str));
 		return mysqli_real_escape_string($this->link, $str);
 	}
 	function match_tag_name($tag){
-		$sql = "SELECT * FROM $this->tbl_name_tags WHERE name = '$tag'";
+		$tag = $this->clear_str($tag);
+		$sql = "SELECT * FROM $this->tbl_tags WHERE name = '$tag'";
 		$response = mysqli_query($this->link, $sql);
 		if($response){
 			return mysqli_fetch_array($response, MYSQLI_ASSOC);
@@ -31,9 +33,9 @@ class Lib{
 			return false;	
 		}
 	}
-	function give_cell_id($id){
+	function give_cells($id){
 		$ids_array = explode(",", $id);
-		$sql = "SELECT * FROM $this->tbl_name_cells WHERE id IN ('$id')";
+		$sql = "SELECT * FROM $this->tbl_cells WHERE id IN ('$id')";
 		$result = mysqli_query($this->link, $sql);
 		if($result){
 			if(count($ids_array) == 1)
@@ -41,41 +43,48 @@ class Lib{
 			else
 				return mysqli_fetch_all($result, MYSQLI_ASSOC);
 		}else {
-			printf("give_cell_id %s\n", mysqli_error($this->link));
+			printf("give_cells %s\n", mysqli_error($this->link));
 			return false;
 		}
 	}
-	function give_tag_id($ids){
+	function give_tags($ids){
 		$ids_arr = explode(",", $ids);
 		
 		if(strlen($ids_arr[0]) == 0)
 			return;
-		$sql = "SELECT * FROM $this->tbl_name_tags WHERE id IN ($ids)";
+		$sql = "SELECT * FROM $this->tbl_tags WHERE id IN ($ids)";
 		$result = mysqli_query($this->link, $sql);
 		if($result){
 			//print_r(mysqli_fetch_array($result, MYSQLI_ASSOC));
 			return mysqli_fetch_all($result, MYSQLI_ASSOC);
 		}else {
-			printf("give_tag_id %s\n", mysqli_error($this->link));
+			printf("give_tags %s\n", mysqli_error($this->link));
 			return false;
 		}
 	}
-	function give_table($table, $array = false){
+	function give_table($table){
 		$sql = "SELECT * FROM $table";
 		$result = mysqli_query($this->link, $sql);	
 		if($result){
-			if($array)
-				return mysqli_fetch_array($result, MYSQLI_ASSOC);
-			else
-				return mysqli_fetch_all($result, MYSQLI_ASSOC);
+			return mysqli_fetch_all($result, MYSQLI_ASSOC);
 		}else {
 			printf("give_table %s\n", mysqli_error($this->link));
 			return false;
 		}
 	}
+	function give_cell_tags($cell_id){
+		$sql = 
+			"SELECT * FROM $this->tbl_tags WHERE id IN ".
+			"(SELECT tag_id FROM $this->tbl_ids_ct WHERE cell_id = $cell_id)";
+		$response = mysqli_query($this->link, $sql);
+		if($response)
+			return mysqli_fetch_all($response, MYSQLI_ASSOC);
+		else
+			printf("%s\n", mysqli_error($this->link));
+	}
 	function remove_cell($id){
 		$id = $this->clear_str($id);
-		$sql = "DELETE FROM $this->tbl_name_cells WHERE id = $id";
+		$sql = "DELETE FROM $this->tbl_cells WHERE id = $id";
 		$response = mysqli_query($this->link, $sql);
 		if($response){
 			return true;
@@ -84,54 +93,51 @@ class Lib{
 			return false;
 		}
 	}
-	function add_tag($tag){
-		$tag = $this->clear_str($tag);
-		$sql = "INSERT INTO $this->tbl_name_tags (name) VALUES ('$tag')";
+	function add_ids_ct($cell_id, $tag_id){
+		$sql = "INSERT INTO $this->tbl_ids_ct (cell_id, tag_id) VALUES ('$cell_id', '$tag_id')";
 		$response = mysqli_query($this->link, $sql);
 		if($response){
-			return $this->give_tag_id(mysqli_insert_id($this->link))[0];
+			return true;
 		}else{
-			printf("Ошибка тег не добавлен %s\n", mysqli_error($this->link));
+			printf("%s\n", mysqli_error($this->link));
+		}
+	}
+	function add_tag($tag){
+		$tag = $this->clear_str($tag);
+		$sql = "INSERT INTO $this->tbl_tags (name) VALUES ('$tag')";
+		$response = mysqli_query($this->link, $sql);
+		if($response){
+			return $this->give_tags(mysqli_insert_id($this->link))[0];
+		}else{
+			printf("Тег не добавлен %s\n", mysqli_error($this->link));
 		}
 	}
 	function add_cell($description, $tags){
-		//$tags_ids = [];
-		$f_tags = [];
-		
-		if(count($tags)){
-			for ($i=0; $i < count($tags); $i++) { 
-					$current_tag = $this->match_tag_name($tags[$i]);
-				if($current_tag){
-					$f_tags[] = $current_tag;
-				}else{
-					$f_tags[] = $this->add_tag($tags[$i]);
-				}
-			}
-			for ($i=0; $i < count($f_tags); $i++) { 
-				$tags_ids[] = $f_tags[$i]['id'];
-			}
-			//$this->update_tags_cells_ids($tags_ids);
-			$tags_ids = implode(",", $tags_ids);
-			//print_r($f_tags);
-		}
 		//print_r($tags_ids);
-		$sql = 
-<<<EOT
-			INSERT INTO $this->tbl_name_cells (description, tags_ids) 
-			VALUES ('$description', '$tags_ids')
-EOT;
+		$sql = "INSERT INTO $this->tbl_cells (description) VALUES ('$description')";
 		$response = mysqli_query($this->link, $sql);
 		if($response){
-			// Получить последний добавленный элемент
-			$cell = $this->give_cell_id(mysqli_insert_id($this->link));
-			//print_r($cell);
-			$cell['tags'] = $this->give_tag_id($cell['tags_ids']);
+			// Получить последний добавленный id
+			$cell_id = mysqli_insert_id($this->link);
+
+			// Добавление тегов
+			if(count($tags)){
+				for ($i=0; $i < count($tags); $i++) { 
+					$tag = $this->match_tag_name($tags[$i]);
+					if(!$tag)
+						$tag = $this->add_tag($tags[$i]);
+					$this->add_ids_ct($cell_id, $tag['id']);
+				}
+			}
+
+			$cell = $this->give_cells($cell_id);			
+			$cell['tags'] = $this->give_cell_tags($cell_id);
+
 			if($cell){
-				$arr = array(
-					'status' => $response,
+				return array(
+					'status' => true,
 					'cell' => $cell
 				);
-				return $arr;
 			}else {
 				printf("Ошибка при возвращении поледнего добавленного  %s\n", mysqli_error($this->link));
 			}
@@ -140,18 +146,14 @@ EOT;
 			//echo 'Ошибка при добавлении \n'.$response;
 		}
 	}
-	function update_tags_cells_ids($tags_ids){
-		return;
-		// for ($i=0; $i < count($f_tags); $i++) { 
-		// 	$tags_ids[] = $f_tags[$i]['id'];
-		// }
-		// $sql = "UPDATE $this->tbl_name_tags (description, tags_ids) VALUES ('$description', '$tags_ids')";
-		// $response = mysqli_query($this->link, $sql);
-	}
+
 }
 
 $lib = new Lib();
 $lib->link = $link;
+$lib->tbl_cells = "cells";
+$lib->tbl_tags = "tags";
+$lib->tbl_ids_ct = "ids_cells_tags";
 
 /* 
 	Основные настроики 
@@ -184,11 +186,9 @@ if($arr["action"] === "delete"){
 	));
 }
 if($arr["action"] === "fetch"){
-	$cells = $lib->give_table($lib->tbl_name_cells);
-	for ($i=0; $i < count($cells); $i++) { 		
-		if(!count($cells[$i]['tags_ids']))
-			return;
-		$cells[$i]['tags'] = $lib->give_tag_id($cells[$i]['tags_ids']);
+	$cells = $lib->give_table($lib->tbl_cells);
+	for ($i=0; $i < count($cells); $i++) {
+		$cells[$i]['tags'] = $lib->give_cell_tags($cells[$i]['id']);
 	}
 	if($cells){
 		echo json_encode(array(
@@ -198,7 +198,6 @@ if($arr["action"] === "fetch"){
 	}else {
 		printf("Ошибка в fetch");
 	}
-
 }
 //$asd = explode(",", ",23");
 //print_r(strlen($asd[0]));
