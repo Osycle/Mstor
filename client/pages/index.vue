@@ -2,6 +2,13 @@
   <div class="index-wrapper">
     <div class="container-fluid">
       <nuxt-link to="/test">Тест</nuxt-link>
+      <h1 @click="req_test">BOOOM</h1>
+      <form action="http://localhost:4444/cgi-bin/handler.py" method="POST">
+        Логин: <input type="text" name="login"><br>
+        Пароль: <input type="password" name="password"><br>
+        <input type="hidden" name="operation" value="login"><br>
+        <input type="submit" value="Войти">
+      </form>
       <Modal v-if="modal_open_status" :modal-data="cells" @modal-manager="modalManager" @append="append"/>
       <div class="cells">
         <div class="cell" v-for="(cell, key) in cells" :key="key">
@@ -61,17 +68,16 @@ export default {
   },
   async mounted(){
     
-    console.log(Modal)
+    //console.log(Modal)
   },
   async asyncData(context){
     try{
-      const data = await context.store.dispatch("trans/query", {
-        action: "fetch"
-      })
-      //console.log(cells);
+      //const data = await context.store.dispatch("trans/query", { action: "fetch" })
+      const data = await context.$axios.$get('http://localhost:4444/cgi-bin/handler.py')
+      console.log(data);
       return {
         data: data,
-        cells: data.cells,
+        //cells: data.cells,
       }
     }catch(e){
       context.error(e);
@@ -83,6 +89,12 @@ export default {
     },
   },
   methods: {
+    req_test(){
+      this.$axios.$get("http://localhost:4444/cgi-bin/handler.py").then(function(response){
+        console.log(response.data);
+      })
+      //console.log();
+    },
     modalManager(act){
       console.log("index", act)
       switch(act){

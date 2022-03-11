@@ -48,11 +48,17 @@ export default {
     '@nuxt/http',
   ],
   axios: {
-    baseURL: 'http://mstor.server',
-    withCredentials: true,
+    baseURL: 'http://localhost:4444/cgi-bin/',
+    //withCredentials: true,
     headers: {
-      //Accept: "*/*",
-      //"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+      "Accept": "*/*",
+      //"Allow": "CONVERT",
+      //"IOsycle": "IO",
+      //"Access-Control-Allow-Origin": "*",
+      //"Access-Control-Request-Headers": "X-Requested-With" ,
+      //"Access-Control-Request-Headers": "Content-Type" ,
+      //"Access-Control-Request-Headers": "Authorization" ,
+      //"Content-Type": "text/plain; charset=UTF-8"
     }
   },
   // PWA module configuration: https://go.nuxtjs.dev/pwa
