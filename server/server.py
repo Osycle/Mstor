@@ -46,17 +46,19 @@ class MyHttp(CGIHTTPRequestHandler):
     self.send_header("Access-Control-Allow-Headers", "Authorization")
     self.send_header("Allow", "CONVERT")
     self.end_headers()
-  def do_GET(self):  
+  def do_POST(self):  
     self.send_response(200)
     self.send_header("Content-Type", "text/html; charset=utf-8")
     self.send_header('Access-Control-Allow-Origin', '*')
     self.send_header('Access-Control-Allow-Methods', 'GET, OPTIONS, POST')
     self.send_header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Authorization")
     self.end_headers()
-    msg = "<h1>Привет</h1>"+self.path
+    msg = "<h1>Привет</h1>"
     self.wfile.write(msg.encode("utf-8"))
 
-httpd = HTTPServer(server_address, CGIHTTPRequestHandler)
+# sys.stdout.reconfigure(encoding='utf-8')
+
+httpd = HTTPServer(server_address, MyHttp)
 
 
 

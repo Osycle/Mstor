@@ -73,7 +73,14 @@ export default {
   async asyncData(context){
     try{
       //const data = await context.store.dispatch("trans/query", { action: "fetch" })
-      const data = await context.$axios.$post('http://localhost:4444/cgi-bin/handler.py')
+      const data = await context.$axios.$post("http://localhost:4444/cgi-bin/handler.py", 
+        {data:2}
+        // {
+        //   headers:{
+        //     "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+        //   }
+        // }
+      )
       console.log(data);
       return {
         data: data,
@@ -90,7 +97,7 @@ export default {
   },
   methods: {
     req_test(){
-      this.$axios.$get("http://localhost:4444/cgi-bin/handler.py").then(function(response){
+      this.$axios.$get("http://localhost:4444/cgi-bin/handler.py", {params:{data:2}}).then(function(response){
         console.log(response.data);
       })
       //console.log();

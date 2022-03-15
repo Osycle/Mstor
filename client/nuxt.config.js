@@ -49,8 +49,10 @@ export default {
   ],
   axios: {
     baseURL: 'http://localhost:4444/cgi-bin/',
-    withCredentials: true,
+    //credentials: false,
     headers: {
+      //"Content-Type": "application/json; charset=UTF-8",
+      //"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
       //"Accept": "*/*",
       //"Allow": "CONVERT",
       //"IOsycle": "IO",
@@ -58,7 +60,6 @@ export default {
       //"Access-Control-Request-Headers": "X-Requested-With" ,
       //"Access-Control-Request-Headers": "Content-Type" ,
       //"Access-Control-Request-Headers": "Authorization" ,
-      //"Content-Type": "text/plain; charset=UTF-8"
     }
   },
   // PWA module configuration: https://go.nuxtjs.dev/pwa

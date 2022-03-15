@@ -9,16 +9,21 @@ from _db import Db
 
 
 print("Access-Control-Allow-Origin: *")
-print("Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS")
-print("Access-Control-Allow-Headers: Content-Type, Authorization, Access-Control-Allow-Methods, Access-Control-Request-Headers")
-# print("Content-Type: application/json; charset=utf-8")
+print("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT")
+print("Access-Control-Allow-Headers: Content-Type")
+# print("Connection: keep-alive")
+# print("Content-Type: application/json;charset=UTF-8")
+# print("Transfer-Encoding: chunked")
+# print("Content-Encoding: br")
 print()
-sys.stdin.reconfigure(encoding='utf-8')
-sys.stdout.reconfigure(encoding='utf-8')
+# sys.stdin.reconfigure(encoding='utf-8')
+# sys.stdout.reconfigure(encoding='utf-8')
 
-db = Db("localhost", "root", "", "test_mstor")
-if os.environ.get("REQUEST_METHOD") == "POST":
-  print(db.get_cells())
-else:
-  print(db.get_cells())
+# db = Db("localhost", "root", "", "test_mstor")
+# print(db.get_cells())
+print("Hello")
+# if os.environ.get("REQUEST_METHOD") == "POST":
+#   print(db.get_cells())
+# else:
+#   print(db.get_cells())
 
