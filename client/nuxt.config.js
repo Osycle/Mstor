@@ -49,9 +49,9 @@ export default {
   ],
   axios: {
     baseURL: 'http://localhost:4444/cgi-bin/',
-    //withCredentials: true,
+    withCredentials: true,
     headers: {
-      "Accept": "*/*",
+      //"Accept": "*/*",
       //"Allow": "CONVERT",
       //"IOsycle": "IO",
       //"Access-Control-Allow-Origin": "*",

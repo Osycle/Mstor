@@ -53,10 +53,10 @@ class MyHttp(CGIHTTPRequestHandler):
     self.send_header('Access-Control-Allow-Methods', 'GET, OPTIONS, POST')
     self.send_header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Authorization")
     self.end_headers()
-    msg = "<h1>Привет</h1>"
+    msg = "<h1>Привет</h1>"+self.path
     self.wfile.write(msg.encode("utf-8"))
 
-httpd = HTTPServer(server_address, MyHttp)
+httpd = HTTPServer(server_address, CGIHTTPRequestHandler)
 
 
 

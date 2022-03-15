@@ -73,7 +73,7 @@ export default {
   async asyncData(context){
     try{
       //const data = await context.store.dispatch("trans/query", { action: "fetch" })
-      const data = await context.$axios.$get('http://localhost:4444/cgi-bin/handler.py')
+      const data = await context.$axios.$post('http://localhost:4444/cgi-bin/handler.py')
       console.log(data);
       return {
         data: data,
