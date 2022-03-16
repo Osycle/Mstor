@@ -3,6 +3,7 @@
     <div class="container-fluid">
       <nuxt-link to="/test">Тест</nuxt-link>
       <h1 @click="req_test">BOOOM</h1>
+      <h3>{{data}}</h3>
       <form action="http://localhost:4444/cgi-bin/handler.py" method="POST">
         Логин: <input type="text" name="login"><br>
         Пароль: <input type="password" name="password"><br>
@@ -72,16 +73,16 @@ export default {
   },
   async asyncData(context){
     try{
-      //const data = await context.store.dispatch("trans/query", { action: "fetch" })
-      const data = await context.$axios.$post("http://localhost:4444/cgi-bin/handler.py", 
-        {data:2}
-        // {
-        //   headers:{
-        //     "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
-        //   }
-        // }
-      )
-      console.log(data);
+      const data = await context.store.dispatch("trans/query", { action: "fetch" })
+      // const data = await context.$axios.$post("/cgi-bin/handler.py", 
+      //   {data:2}
+      //   // {
+      //   //   headers:{
+      //   //     "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+      //   //   }
+      //   // }
+      // )
+      // console.log(data);
       return {
         data: data,
         //cells: data.cells,

@@ -13,7 +13,7 @@ export default {
     ]
   },
   server: {
-    port: 5000,
+    port: 3030,
   },
   loading: { color: '#05141F' },
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -48,12 +48,12 @@ export default {
     '@nuxt/http',
   ],
   axios: {
-    baseURL: 'http://localhost:4444/cgi-bin/',
+    baseURL: 'http://localhost:4040/',
     //credentials: false,
     headers: {
       //"Content-Type": "application/json; charset=UTF-8",
       //"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-      //"Accept": "*/*",
+      "Accept": "*/*",
       //"Allow": "CONVERT",
       //"IOsycle": "IO",
       //"Access-Control-Allow-Origin": "*",

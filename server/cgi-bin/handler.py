@@ -7,6 +7,7 @@ import html
 import mysql.connector
 from _db import Db
 
+sys.stdout.reconfigure(encoding='utf-8')
 
 print("Access-Control-Allow-Origin: *")
 print("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT")
@@ -17,7 +18,7 @@ print("Access-Control-Allow-Headers: Content-Type")
 # print("Content-Encoding: br")
 print()
 # sys.stdin.reconfigure(encoding='utf-8')
-# sys.stdout.reconfigure(encoding='utf-8')
+
 
 # db = Db("localhost", "root", "", "test_mstor")
 # print(db.get_cells())
