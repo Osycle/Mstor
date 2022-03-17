@@ -1,10 +1,11 @@
-
 import cgi
 import sys
 from http.server import HTTPServer, CGIHTTPRequestHandler
+# import socketserver
 CGIHTTPRequestHandler.cgi_directories = ["/cgi-bin"]
 PORT = 4040
-server_address = ("", PORT)
+server_address = ("127.0.0.1", PORT)
+
 # print(CGIHTTPRequestHandler.responses)
 
 # class MyHttp(CGIHTTPRequestHandler):
@@ -23,16 +24,6 @@ server_address = ("", PORT)
 #     self.send_header('Access-Control-Allow-Methods', 'GET, OPTIONS, POST')
 #     self.send_header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Authorization")
 #     self.end_headers()
-      
-
-# class MyHttpServer(BaseHTTPRequestHandler):
-#   def do_GET(self):
-#     self.send_response(200)
-#     self.send_header("Content-Type", "text/html")
-#     self.end_headers()
-#     msg = "Hellow"
-#     self.wfile.write(msg.encode("utf-8"))
-
 
 # print(sys.stdout.encoding)
 
@@ -53,11 +44,14 @@ class MyHttp(CGIHTTPRequestHandler):
   #   msg = "<h1>Привет</h1>"
   #   self.wfile.write(msg.encode("utf-8"))
 
-# sys.stdout.reconfigure(encoding='utf-8')
+sys.stdout.reconfigure(encoding='utf-8')
 
 httpd = HTTPServer(server_address, MyHttp)
+# Handler = http.server.SimpleHTTPRequestHandler
 
-
-
-print("Liste: ", PORT)
+# with socketserver.TCPServer(server_address, CGIHTTPRequestHandler) as httpd:
+#     print("serving at port", PORT)
+#     httpd.serve_forever()
+print("Listen: ", PORT)
+print("CGIHTTPRequestHandler: ", CGIHTTPRequestHandler)
 httpd.serve_forever()

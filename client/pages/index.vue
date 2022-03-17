@@ -68,20 +68,19 @@ export default {
     Modal
   },
   async mounted(){
-    
-    //console.log(Modal)
+    window.olo = this;
+    //var doo = this.$axios.$post("/cgi-bin/handler.py", {params:{doo:2}})
+    //console.log(doo)
   },
   async asyncData(context){
     try{
+      // {
+      //   headers:{
+      //     "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+      //   }
+      // }
       const data = await context.store.dispatch("trans/query", { action: "fetch" })
-      // const data = await context.$axios.$post("/cgi-bin/handler.py", 
-      //   {data:2}
-      //   // {
-      //   //   headers:{
-      //   //     "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
-      //   //   }
-      //   // }
-      // )
+      // const data = await context.$axios.$get("/cgi-bin/handler.py", {params:{d:2}})
       // console.log(data);
       return {
         data: data,
@@ -98,8 +97,8 @@ export default {
   },
   methods: {
     req_test(){
-      this.$axios.$get("http://localhost:4444/cgi-bin/handler.py", {params:{data:2}}).then(function(response){
-        console.log(response.data);
+      this.$axios.$get("/cgi-bin/handler.py", {params:{data:2}}).then(function(response){
+        console.log(response);
       })
       //console.log();
     },

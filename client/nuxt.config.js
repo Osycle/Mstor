@@ -1,8 +1,15 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
+  mode: 'universal',
+  target: 'server',
+  server: {
+    port: 3030,
+  },
   head: {
     title: 'mstor',
+    
     meta: [
+      
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: '' },
@@ -12,9 +19,7 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
-  server: {
-    port: 3030,
-  },
+
   loading: { color: '#05141F' },
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
@@ -53,13 +58,11 @@ export default {
     headers: {
       //"Content-Type": "application/json; charset=UTF-8",
       //"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-      "Accept": "*/*",
+      // "Accept": "*/*",
       //"Allow": "CONVERT",
       //"IOsycle": "IO",
-      //"Access-Control-Allow-Origin": "*",
-      //"Access-Control-Request-Headers": "X-Requested-With" ,
+      // "Access-Control-Allow-Origin": "*",
       //"Access-Control-Request-Headers": "Content-Type" ,
-      //"Access-Control-Request-Headers": "Authorization" ,
     }
   },
   // PWA module configuration: https://go.nuxtjs.dev/pwa

@@ -2,6 +2,7 @@
 import sys
 import mysql.connector
 import json
+import datetime
 
 
 
@@ -28,10 +29,19 @@ class Db:
     
   def get_cells(self, sql = ""):
     
-    sql = f"SELECT * FROM {self.tn_cells}"
+    sql = f"SELECT date_time FROM {self.tn_cells}"
     self.mycursor.execute(sql)
     result = self.mycursor.fetchall()
-    return result
+    si = []
+    # test = [("sddas1", "sd222dsad"),("zzzzzz1", "xxxxx2")]
+    # for line in result:
+    #   line = json.dumps(line)
+    #   si.append(line)
+    for line in result:
+      
+      si.append(line)
+    return si
+    # return result[1].timestamp()
     # # mycursor = self.db.cursor()
     # sql = f"SELECT * FROM tags {self.tn_tags}"
     # self.mycursor.execute(sql)
