@@ -83,8 +83,8 @@ export default {
       // const data = await context.$axios.$get("/cgi-bin/handler.py", {params:{d:2}})
       // console.log(data);
       return {
-        data: data,
-        //cells: data.cells,
+        //data: data,
+        cells: data.cells,
       }
     }catch(e){
       context.error(e);

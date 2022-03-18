@@ -1,15 +1,25 @@
 import sys
 
-from cgi import FieldStorage
+import cgi
+import json
 from http import cookies
 import os
 import html
 import mysql.connector
 from _db import Db
+
 import cgitb
 cgitb.enable()
 
+import pymysql
+import pymysql.cursors
+
+
 sys.stdout.reconfigure(encoding='utf-8')
+sys.stdin.reconfigure(encoding='utf-8')
+
+
+
 
 print("Access-Control-Allow-Origin: *")
 print("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT")
@@ -22,13 +32,47 @@ print("Content-Type: text/html;charset=UTF-8")
 # print("Transfer-Encoding: chunked")
 # print("Content-Encoding: br")
 print()
-# sys.stdin.reconfigure(encoding='utf-8')
+
+
 
 
 db = Db("localhost", "root", "", "test_mstor")
-print(db.get_cells())
-# if os.environ.get("REQUEST_METHOD") == "POST":
-#   print(db.get_cells())
-# else:
-#   print(db.get_cells())
+
+
+
+
+if os.environ.get("REQUEST_METHOD") == "POST":
+
+  from urllib.parse import parse_qs
+
+  content_len = os.environ.get('CONTENT_LENGTH', '0')
+  method = os.environ.get('REQUEST_METHOD', '')
+  query_string = os.environ.get('QUERY_STRING', '')
+
+  if query_string:
+    print("this query string")
+    exit()
+
+  body = sys.stdin.read(int(content_len))
+
+  try:
+    result = json.loads(body)
+  except:
+    print("this is not json")
+    exit()
+
+  if "action" in result:
+    if(result["action"] == "fetch"):
+      print(db.get_cells())
+    else:
+      print("'action' Key not found")
+
+
+
+  # query = parse_qs(query_string)
+  # print('test: ', query['test'][0])
+
+
+
+# print(db.get_cells())
 

@@ -1,10 +1,16 @@
 
+# -*- coding: utf-8 -*-
+# python -m pip install mysql-connector-python
+# python -m pip install PyMySQL
+
+
 import sys
 import mysql.connector
 import json
 import datetime
-
-
+import re
+import pymysql
+import pymysql.cursors
 
 
 
@@ -15,7 +21,7 @@ class Db:
   tn_cells = "cells"
   tn_tags = "tags"
   tn_ids_cells_tags = "ids_cells_tag"
-
+  
   def __init__(self, host, user, password, database):
 
     self.config = {
@@ -24,27 +30,30 @@ class Db:
       "password": password,
       "database": database
     }
-    self.db = mysql.connector.connect(**self.config)
-    self.mycursor = self.db.cursor()
+    self.connection = pymysql.connect(
+      host=host, 
+      user=user, 
+      password=password, 
+      database=database,
+      charset='utf8mb4',
+      cursorclass=pymysql.cursors.DictCursor)
+    self.cursor = self.connection.cursor()
     
   def get_cells(self, sql = ""):
-    
-    sql = f"SELECT date_time FROM {self.tn_cells}"
-    self.mycursor.execute(sql)
-    result = self.mycursor.fetchall()
-    si = []
-    # test = [("sddas1", "sd222dsad"),("zzzzzz1", "xxxxx2")]
-    # for line in result:
-    #   line = json.dumps(line)
-    #   si.append(line)
-    for line in result:
-      
-      si.append(line)
-    return si
-    # return result[1].timestamp()
-    # # mycursor = self.db.cursor()
-    # sql = f"SELECT * FROM tags {self.tn_tags}"
-    # self.mycursor.execute(sql)
-    # ol2 = self.mycursor.fetchall()
-    # print(ol2)
-    
+    sql = f"SELECT * FROM {self.tn_cells}"
+    try:
+      self.cursor.execute("SELECT * FROM cells")
+      rows = self.cursor.fetchall()
+      cells = []
+      for row in rows:
+        row["date_time"] = round(row["date_time"].timestamp())
+        row["date_time_edit"] = round(row["date_time_edit"].timestamp())
+        cells.append(row)
+
+      result = {
+        "cells": cells
+      }
+      return json.dumps(result)
+    finally:
+      self.connection.close()
+
