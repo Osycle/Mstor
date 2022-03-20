@@ -92,7 +92,7 @@ export default {
   },
   watch:{
     cells(){
-      console.log(11)
+      //console.log(11)
     },
   },
   methods: {
@@ -114,26 +114,20 @@ export default {
     append(cell){
       this.cells.push(cell);
     },
-    async delCell(id){
+    async delCell(cell_id){
       var vm = this
       console.log(vm.cells);
       //this.$set(this.cells)
 
       //console.log(vm.cells, s, id)
       //return;
-      const response = await this.$axios.$post("/", {
-        action: "delete",
-        params: {id}
+      const response = await this.$axios.$post("/handler.py", {
+        action: "delete_cell",
+        cell_id
       })
-      if(response.status === true){
-        vm.$_.remove(vm.cells, {id})
+      if(response.status == true){
+        vm.$_.remove(vm.cells, {id: cell_id})
         vm.cells = vm.$_.concat(vm.cells)
-        //var s = this.$_.remove(this.cells, 'id='+id)
-        //console.log(this.cells)
-        // this.cells.forEach((el, i)=>{
-        //  console.log(i, el);
-
-        // })
       }
         
     },

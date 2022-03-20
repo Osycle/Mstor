@@ -72,10 +72,10 @@
     },
     methods: {
       async addCell(){
-        const response = await this.$axios.$post("/", {
-          action: "insert",
-          params: {
-            title: this.title,
+        const response = await this.$axios.$post("/handler.py", {
+          action: "add_cell",
+          content: {
+            //title: this.title,
             description: this.description,
             tags: this.tags,
           }

@@ -1,6 +1,5 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
-  mode: 'universal',
   target: 'server',
   server: {
     port: 3030,
@@ -53,7 +52,7 @@ export default {
     '@nuxt/http',
   ],
   axios: {
-    baseURL: 'http://localhost:4040/',
+    baseURL: 'http://localhost:4040/cgi-bin/',
     //credentials: false,
     headers: {
       //"Content-Type": "application/json; charset=UTF-8",

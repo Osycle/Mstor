@@ -62,10 +62,38 @@ if os.environ.get("REQUEST_METHOD") == "POST":
     exit()
 
   if "action" in result:
-    if(result["action"] == "fetch"):
-      print(db.get_cells())
-    else:
-      print("'action' Key not found")
+    if(result["action"] == "fetch_cells"):
+      cells = db.fetch_cells()
+      cells = db.date_timestamp(cells)
+      for cell in cells:
+        cell["tags"] = db.date_timestamp(cell["tags"])
+      result = {
+        "status": True,
+        "cells": cells
+      }
+      result = json.dumps(result)
+      print(result)
+      exit()
+    if(result["action"] == "delete_cell"):
+      count = db.remove_cell(result["cell_id"])
+      result = {
+        "status": True,
+        "count": count
+      }
+      result = json.dumps(result)
+      print(result)
+      exit()
+    if(result["action"] == "add_cell"):
+      count = db.add_cell(result["content"])
+      # result = {
+      #   "status": True,
+      #   "count": count
+      # }
+      # result = json.dumps(result)
+      # print(result)
+      exit()
+
+    print("'action' Key not found")
 
 
 
@@ -74,5 +102,5 @@ if os.environ.get("REQUEST_METHOD") == "POST":
 
 
 
-# print(db.get_cells())
+# print(db.fetch_cells())
 

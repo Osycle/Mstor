@@ -5,7 +5,7 @@ const config = require('./nuxt.config.js');
 
 // Create new express app
 const app = express();
-
+console.log("Я запустился Express");
 // Listen to port 3000 or PORT env if provided
 app.listen(process.env.PORT || 3000);
 
