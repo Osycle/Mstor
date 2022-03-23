@@ -43,11 +43,20 @@ class Db:
     self.cursor = self.connection.cursor()
   
   def date_timestamp(self, arr):
+    type_dict = isinstance(arr, dict)
+    if type_dict:
+      arr = [arr]
     for item in arr:
-      for field in item:
-        if isinstance(item[field], datetime.datetime):
-          item[field] = round(item[field].timestamp())
-    return arr
+      if isinstance(item, dict):
+        for field in item:
+          if isinstance(item[field], datetime.datetime):
+            item[field] = item[field].timestamp()
+          if isinstance(item[field], list):
+            self.date_timestamp(item[field])
+    if type_dict:
+      return arr[0]
+    else:
+      return arr
 
   def fetch_cells(self):
     sql = f"SELECT * FROM {self.tn_cells}"
@@ -61,12 +70,52 @@ class Db:
     finally:
       self.connection.close()
 
-  def remove_cell(self, id):
-    sql = f"DELETE FROM {self.tn_cells} WHERE id = {id}"
+  def remove_cell_synapse(self, id):
     try:
-      self.cursor.execute(sql)
+      sql = f"DELETE FROM {self.tn_cells_tags} WHERE cell_id = {id}"
+      result = self.cursor.execute(sql)
       self.connection.commit()
-      return self.cursor.rowcount
+      return result
+    except:
+      print("Error remove_tag")
+
+  def remove_tag(self, id):
+    try:
+      sql = f"DELETE FROM {self.tn_tags} WHERE id = {id}"
+      result = self.cursor.execute(sql)
+      self.connection.commit()
+      return result
+    except:
+      print("Error remove_tag")
+
+  def remove_cell(self, id):
+    try:
+      result = {}
+      # Выборка единичных тегов этого id в таблице связях
+      sql = f"""
+        SELECT * FROM {self.tn_cells_tags} 
+        WHERE tag_id NOT IN
+          (SELECT tag_id FROM {self.tn_cells_tags} 
+            WHERE tag_id IN 
+              (SELECT tag_id FROM {self.tn_cells_tags} WHERE cell_id IN ({id}))
+            AND cell_id NOT IN ({id}))
+        AND cell_id IN ({id})  
+      """
+      self.cursor.execute(sql)
+      items = self.cursor.fetchall()
+      result["remove_tags"] = 0
+      for item in items:
+        result["remove_tags"] += self.remove_tag(item["tag_id"]) # Удаление еденичного тега это id
+      result["remove_cell_synapse"] = self.remove_cell_synapse(id) # Удаление связи к тегам
+
+      # Удаление ячейки
+      sql = f"DELETE FROM {self.tn_cells} WHERE id = {id}"
+      result["remove_cell"] = self.cursor.execute(sql)
+      self.connection.commit()
+
+      return result
+    except:
+      print("Error remove_cell")
     finally:
       self.connection.close()
 
@@ -126,13 +175,7 @@ class Db:
     except:
       print("Error give_cell")
 
-
   def add_cell(self, content):
-    # olo = self.give_cells()
-    # if olo:
-    #   self.date_timestamp(olo)
-    #   # print(olo)
-    # return
     description = content["description"]
     tags = content["tags"]
     sql = f"INSERT INTO {self.tn_cells} (description) VALUES (%s)"
@@ -147,12 +190,10 @@ class Db:
           tag = self.match_tag(tag_name)
           if not tag:
             tag = self.add_tag(tag_name)
-          # print(cell_id, tag["id"])
           self.synapse_cell_tag(cell_id, tag["id"])
-
-      cell = self.give_cell(cell_id)
-      print(cell)
-            
-        
+      return self.give_cell(cell_id)
     finally:
       self.connection.close()
+
+  def edit_cell(self, content):
+    print(content)
