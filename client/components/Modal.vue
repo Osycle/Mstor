@@ -5,10 +5,11 @@
         <div class="modal-container">
           <div class="modal-header">
             <div class="cap">
-              Добавить
+              <span v-if="edit_cell">Редактировать</span>
+              <span v-else>Добавить</span>
             </div>
             <span class="cap-btn-close">
-              <span @click="$emit('modal-manager', 'close')"></span>
+              <span @click="$store.commit('modal/close')"></span>
             </span>
           </div>
           <div class="modal-content">
@@ -19,13 +20,10 @@
               <tags-input element-id="tags"
                 v-model="selectedTags"
                 :input-id="'add-tags-input'"
-                :existing-tags="[
-
-                ]"
+                :existing-tags="ext"
                 placeholder="Добавить категорию"
                 :discard-search-text="'Отменить результаты поиска'"
                 :id-field="'value'"
-                
                 :typeahead="true"
                 :typeahead-hide-discard="false"
                 ></tags-input>
@@ -33,7 +31,7 @@
           </div>
           <div class="modal-footer">
             <div class="btn-content">
-              <button type="button" class="btn-def" @click="addCell">
+              <button type="button" class="btn-def" @click.once="submit">
                 <span>Сохранить</span>
               </button>
             </div>
@@ -47,14 +45,13 @@
 <script>
   import { TagsInput } from '@seriouslag/vue-tagsinput';
   export default {
-    props: ['modal-data', 'modal-manager'],
+    props: [],
     data(){
       return {
-        selectedTags: null,
-        title: "",
+        selectedTags: [],
         description: "",
-        tags: [],
-        ext: []
+        tags: ['sadas'],
+        ext: [{value: 'asda'}]
       }
     },
     watch: {
@@ -66,32 +63,59 @@
       }
     },
     computed: {
+      edit_cell(){
+        return this.$store.state.modal.edit_cell
+      }
     },
     components: {
-        TagsInput,
+      TagsInput,
     },
     methods: {
+      async submit(){
+        if(this.edit_cell)
+          this.editCell()
+        else
+          this.addCell()
+      },
+      async editCell(){
+        const response = await this.$axios.$post("/handler.py", {
+          action: "edit_cell",
+          content: {
+            description: this.description,
+            tags: this.tags,
+          }
+        })
+        if(response.status){
+          // this.$emit("append", response.cell)
+          // this.$store.commit("modal/close")
+        }
+      },
       async addCell(){
         const response = await this.$axios.$post("/handler.py", {
           action: "add_cell",
           content: {
-            //title: this.title,
             description: this.description,
             tags: this.tags,
           }
         })
         if(response.status){
           this.$emit("append", response.cell)
-          this.$emit("modal-manager", "close");
+          this.$store.commit("modal/close")
         }
-
-        console.log(this.response);
       },
     },
+    created(){
+      if(this.edit_cell){
+        this.description = this.edit_cell.description
+        this.edit_cell.tags.forEach((item)=>{
+          this.selectedTags.push({value: item.name})
+        })
+      }
+      // console.log(this.edit_cell);
+    },
     mounted(){
-      
-      console.log(this.modalData)
-      console.log("Modal mounted")
+      window.ss = this
+      console.log("mounted modal")
     }
   }
 </script>
