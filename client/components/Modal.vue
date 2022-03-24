@@ -78,9 +78,11 @@
           this.addCell()
       },
       async editCell(){
+        console.log(this.edit_cell);
         const response = await this.$axios.$post("/handler.py", {
           action: "edit_cell",
           content: {
+            id: this.edit_cell.id,
             description: this.description,
             tags: this.tags,
           }

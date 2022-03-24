@@ -70,6 +70,23 @@ class Db:
     finally:
       self.connection.close()
 
+  # Выборка единичных тегов этого id в таблице связях
+  def sole_tag_synapse(self, cell_id):
+    try:
+      sql = f"""
+        SELECT * FROM {self.tn_cells_tags} 
+        WHERE tag_id NOT IN
+          (SELECT tag_id FROM {self.tn_cells_tags} 
+            WHERE tag_id IN 
+              (SELECT tag_id FROM {self.tn_cells_tags} WHERE cell_id IN ({cell_id}))
+            AND cell_id NOT IN ({cell_id}))
+        AND cell_id IN ({cell_id})  
+      """
+      self.cursor.execute(sql)
+      return self.cursor.fetchall()
+    except:
+      print("Error sole_tag_synapse")
+
   def remove_cell_synapse(self, id):
     try:
       sql = f"DELETE FROM {self.tn_cells_tags} WHERE cell_id = {id}"
@@ -88,28 +105,17 @@ class Db:
     except:
       print("Error remove_tag")
 
-  def remove_cell(self, id):
+  def remove_cell(self, cell_id):
     try:
       result = {}
-      # Выборка единичных тегов этого id в таблице связях
-      sql = f"""
-        SELECT * FROM {self.tn_cells_tags} 
-        WHERE tag_id NOT IN
-          (SELECT tag_id FROM {self.tn_cells_tags} 
-            WHERE tag_id IN 
-              (SELECT tag_id FROM {self.tn_cells_tags} WHERE cell_id IN ({id}))
-            AND cell_id NOT IN ({id}))
-        AND cell_id IN ({id})  
-      """
-      self.cursor.execute(sql)
-      items = self.cursor.fetchall()
+      items = self.sole_tag_synapse(cell_id)
       result["remove_tags"] = 0
       for item in items:
         result["remove_tags"] += self.remove_tag(item["tag_id"]) # Удаление еденичного тега это id
-      result["remove_cell_synapse"] = self.remove_cell_synapse(id) # Удаление связи к тегам
+      result["remove_cell_synapse"] = self.remove_cell_synapse(cell_id) # Удаление связи к тегам
 
       # Удаление ячейки
-      sql = f"DELETE FROM {self.tn_cells} WHERE id = {id}"
+      sql = f"DELETE FROM {self.tn_cells} WHERE id = {cell_id}"
       result["remove_cell"] = self.cursor.execute(sql)
       self.connection.commit()
 
@@ -196,4 +202,14 @@ class Db:
       self.connection.close()
 
   def edit_cell(self, content):
-    print(content)
+    cell_id = content["id"]
+    description = content["description"]
+    tags = content["tags"]
+    sql = f"UPDATE {self.tn_cells} SET description = %s WHERE id = %s"
+    val = (description, cell_id)
+    try:
+      self.cursor.execute(sql, val)
+      self.connection.commit()
+    finally:
+      self.connection.close()
+    
