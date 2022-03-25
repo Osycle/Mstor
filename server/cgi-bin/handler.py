@@ -93,13 +93,13 @@ if os.environ.get("REQUEST_METHOD") == "POST":
       exit()
     if(result["action"] == "edit_cell"):
       cell = db.edit_cell(result["content"])
-      # cell = db.date_timestamp(cell)
-      # result = {
-      #   "status": True,
-      #   "cell": cell
-      # }
-      # result = json.dumps(result)
-      # print(result)
+      cell = db.date_timestamp(cell)
+      result = {
+        "status": True,
+        "cell": cell
+      }
+      result = json.dumps(result)
+      print(result)
       exit()
 
 

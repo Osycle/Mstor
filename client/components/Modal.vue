@@ -31,7 +31,7 @@
           </div>
           <div class="modal-footer">
             <div class="btn-content">
-              <button type="button" class="btn-def" @click.once="submit">
+              <button type="button" class="btn-def" @click="submit">
                 <span>Сохранить</span>
               </button>
             </div>
@@ -88,8 +88,8 @@
           }
         })
         if(response.status){
-          // this.$emit("append", response.cell)
-          // this.$store.commit("modal/close")
+          this.$emit("append", response.cell)
+          this.$store.commit("modal/close")
         }
       },
       async addCell(){

@@ -87,9 +87,9 @@ class Db:
     except:
       print("Error sole_tag_synapse")
 
-  def remove_cell_synapse(self, id):
+  def remove_cell_synapse(self, cell_id):
     try:
-      sql = f"DELETE FROM {self.tn_cells_tags} WHERE cell_id = {id}"
+      sql = f"DELETE FROM {self.tn_cells_tags} WHERE cell_id = {cell_id}"
       result = self.cursor.execute(sql)
       self.connection.commit()
       return result
@@ -113,12 +113,10 @@ class Db:
       for item in items:
         result["remove_tags"] += self.remove_tag(item["tag_id"]) # Удаление еденичного тега это id
       result["remove_cell_synapse"] = self.remove_cell_synapse(cell_id) # Удаление связи к тегам
-
       # Удаление ячейки
       sql = f"DELETE FROM {self.tn_cells} WHERE id = {cell_id}"
       result["remove_cell"] = self.cursor.execute(sql)
       self.connection.commit()
-
       return result
     except:
       print("Error remove_cell")
@@ -147,7 +145,7 @@ class Db:
       return self.cursor.fetchone()
     except:
       print("Error add_tag")
-  
+
   def synapse_cell_tag(self, cell_id, tag_id):
     sql = f"INSERT INTO {self.tn_cells_tags} (cell_id, tag_id) VALUES (%s, %s)"
     val = (cell_id, tag_id)
@@ -181,6 +179,15 @@ class Db:
     except:
       print("Error give_cell")
 
+  def unite_tags(self, tags, cell_id):
+    if not len(tags):
+      return
+    for tag_name in tags:
+      tag = self.match_tag(tag_name)
+      if not tag:
+        tag = self.add_tag(tag_name)
+      self.synapse_cell_tag(cell_id, tag["id"])
+
   def add_cell(self, content):
     description = content["description"]
     tags = content["tags"]
@@ -191,12 +198,7 @@ class Db:
       cell_id = self.cursor.lastrowid
       if not self.cursor.rowcount:
         return
-      if(len(tags)):
-        for tag_name in tags:
-          tag = self.match_tag(tag_name)
-          if not tag:
-            tag = self.add_tag(tag_name)
-          self.synapse_cell_tag(cell_id, tag["id"])
+      self.unite_tags(tags, cell_id)
       return self.give_cell(cell_id)
     finally:
       self.connection.close()
@@ -205,11 +207,21 @@ class Db:
     cell_id = content["id"]
     description = content["description"]
     tags = content["tags"]
-    sql = f"UPDATE {self.tn_cells} SET description = %s WHERE id = %s"
-    val = (description, cell_id)
     try:
+      # Удаляем cell
+      sql = f"UPDATE {self.tn_cells} SET description = %s WHERE id = %s"
+      val = (description, cell_id)
       self.cursor.execute(sql, val)
       self.connection.commit()
+      # Удаляем, добавляем теги
+      items = self.sole_tag_synapse(cell_id)
+      for item in items:
+        self.remove_tag(item["tag_id"]) # Удаление еденичного тега этого cell
+      self.remove_cell_synapse(cell_id) # Удаление связи к тегам
+      self.unite_tags(tags, cell_id)
+      return self.give_cell(cell_id)
+    except:
+      print("Error edit_cell")
     finally:
       self.connection.close()
     
