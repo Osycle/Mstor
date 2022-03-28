@@ -1,7 +1,6 @@
 <template>
   <div class="index-wrapper">
     <div class="container-fluid">
-      <nuxt-link to="/test">Тест</nuxt-link>
       <Modal 
         @cell_append="cell_append" 
         @cell_update="cell_update" 
@@ -20,7 +19,7 @@
             </div>
             <div class="text-content">
               <!-- <nuxt-link :to="'/cell/'+cell.id">Далее</nuxt-link> -->
-              <span>{{cell.description | textLimit(90)}}</span>
+              <div>{{cell.description | textLimit(140)}}</div>
             </div>
             <div class="btn-content">
               <button type="button" class="btn-edit" title="Редактировать" @click="editCell(cell)">

@@ -3,6 +3,7 @@
     <div class="header-wrapper">
       <div class="container">
         <div class="header-content">
+          <nuxt-link to="/test" style="color: white;">Тест</nuxt-link>
           <div id="search" class="search">
             <div class="input-content">
               <input type="text" name="">

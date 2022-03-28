@@ -11,7 +11,13 @@
 
 
 
-
+main{
+  &:before, &:after{
+    content: "";
+    clear: both;
+    display: table;
+  }
+}
 
 
 .cells{
@@ -20,9 +26,9 @@
   //display: grid;
   //grid-template-columns: repeat(12, 1fr);
   //grid-gap: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
+  display: grid;
+  // ♣flex-wrap: wrap;
+  // ♣flex-direction: row;
 }
 .cell{
   flex-shrink: 0;
@@ -45,6 +51,8 @@
     margin-bottom: 5px;
   }
   .text-content{
+    // line-break: anywhere;
+    word-break: break-word;
     padding-top: 3px;
   }
   .btn-edit, .btn-del{
@@ -91,7 +99,6 @@
 
 }
 .cell-wrapper{
-  @include shadow-border;
   padding: 8px;
   color: white;
   width: 130px;
@@ -230,7 +237,7 @@ input, textarea{
     left: 0;
     top: 0;
     z-index: 1;
-    background-image: linear-gradient(to right, transparent 80%, white 95%);
+    //background-image: linear-gradient(to right, transparent 80%, white 95%);
   }
   .tags-item{
     background-color: $color-3;
