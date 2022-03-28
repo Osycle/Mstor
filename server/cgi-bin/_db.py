@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # python -m pip install mysql-connector-python
 # python -m pip install PyMySQL
+# python -m pip install wikipedia-api
 
 
 import sys
@@ -13,6 +14,8 @@ import datetime
 import re
 import pymysql
 import html
+
+from zmq import PROTOCOL_ERROR_ZMTP_MECHANISM_MISMATCH
 
 # import MySQLdb
 
@@ -67,9 +70,9 @@ class Db:
         tags = self.give_cell_tags(cell["id"])
         cell["tags"] = tags
       return  cells
-    finally:
-      self.connection.close()
-
+    except:
+      print("Error fetch_cells")
+      
   # Выборка единичных тегов этого id в таблице связях
   def sole_tag_synapse(self, cell_id):
     try:
@@ -89,17 +92,17 @@ class Db:
 
   def remove_cell_synapse(self, cell_id):
     try:
-      sql = f"DELETE FROM {self.tn_cells_tags} WHERE cell_id = {cell_id}"
-      result = self.cursor.execute(sql)
+      sql = f"DELETE FROM {self.tn_cells_tags} WHERE cell_id = %s"
+      result = self.cursor.execute(sql, (cell_id))
       self.connection.commit()
       return result
     except:
       print("Error remove_tag")
 
-  def remove_tag(self, id):
+  def remove_tag(self, tag_id):
     try:
-      sql = f"DELETE FROM {self.tn_tags} WHERE id = {id}"
-      result = self.cursor.execute(sql)
+      sql = f"DELETE FROM {self.tn_tags} WHERE id = %s"
+      result = self.cursor.execute(sql, (tag_id))
       self.connection.commit()
       return result
     except:
@@ -114,8 +117,8 @@ class Db:
         result["remove_tags"] += self.remove_tag(item["tag_id"]) # Удаление еденичного тега это id
       result["remove_cell_synapse"] = self.remove_cell_synapse(cell_id) # Удаление связи к тегам
       # Удаление ячейки
-      sql = f"DELETE FROM {self.tn_cells} WHERE id = {cell_id}"
-      result["remove_cell"] = self.cursor.execute(sql)
+      sql = f"DELETE FROM {self.tn_cells} WHERE id = %s"
+      result["remove_cell"] = self.cursor.execute(sql, (cell_id))
       self.connection.commit()
       return result
     except:
@@ -124,10 +127,9 @@ class Db:
       self.connection.close()
 
   def match_tag(self, tag):
-    tag = html.escape(tag)
-    sql = f"SELECT * FROM {self.tn_tags} WHERE name = %s"
     try:
-      if(self.cursor.execute(sql, tag)):
+      sql = f"SELECT * FROM {self.tn_tags} WHERE name = %s"
+      if(self.cursor.execute(sql, (tag))):
         return self.cursor.fetchone()
       else:
         return False
@@ -135,10 +137,9 @@ class Db:
       print("Error match_tag")
 
   def add_tag(self, tag):
-    tag = html.escape(tag)
-    sql = f"INSERT INTO {self.tn_tags} (name) VALUES (%s)"
     try:
-      self.cursor.execute(sql, tag)
+      sql = f"INSERT INTO {self.tn_tags} (name) VALUES (%s)"
+      self.cursor.execute(sql, (tag))
       self.connection.commit()
       sql = f"SELECT * FROM {self.tn_tags} WHERE id = %s"
       self.cursor.execute(sql, self.cursor.lastrowid)
@@ -147,31 +148,42 @@ class Db:
       print("Error add_tag")
 
   def synapse_cell_tag(self, cell_id, tag_id):
-    sql = f"INSERT INTO {self.tn_cells_tags} (cell_id, tag_id) VALUES (%s, %s)"
-    val = (cell_id, tag_id)
     try:
+      val = (cell_id, tag_id)
+      sql = f"INSERT INTO {self.tn_cells_tags} (cell_id, tag_id) VALUES (%s, %s)"
       self.cursor.execute(sql, val)
       self.connection.commit()
       return True
     except:
       print("Error synapse")
 
+  def give_tags(self):
+    # tag_id = tuple(tag_id)
+    # sql = f"SELECT * FROM {self.tn_tags} WHERE id IN %s"
+    sql = f"SELECT * FROM {self.tn_tags}"
+    try:
+      self.cursor.execute(sql)
+      return self.cursor.fetchall()
+    except:
+      print("Error give_tags")
+    
+
   def give_cell_tags(self, cell_id):
     try:
       sql = f"""
         SELECT * FROM {self.tn_tags} WHERE id IN 
-        (SELECT tag_id FROM {self.tn_cells_tags} WHERE cell_id = {cell_id})
+        (SELECT tag_id FROM {self.tn_cells_tags} WHERE cell_id = %s)
       """
-      self.cursor.execute(sql)
+      self.cursor.execute(sql, (cell_id))
       tags = self.cursor.fetchall()
       return tags
     except:
       print("Error give_cell_tags")
 
   def give_cell(self, id):
-    sql = f"SELECT * FROM {self.tn_cells} WHERE id IN ({id})"
+    sql = f"SELECT * FROM {self.tn_cells} WHERE id IN (%s)"
     try:
-      self.cursor.execute(sql)
+      self.cursor.execute(sql, (id))
       cell = self.cursor.fetchone()
       tags = self.give_cell_tags(id)
       cell["tags"] = tags
@@ -193,7 +205,7 @@ class Db:
     tags = content["tags"]
     sql = f"INSERT INTO {self.tn_cells} (description) VALUES (%s)"
     try:
-      self.cursor.execute(sql, description)
+      self.cursor.execute(sql, (description))
       self.connection.commit()
       cell_id = self.cursor.lastrowid
       if not self.cursor.rowcount:

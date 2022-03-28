@@ -20,7 +20,7 @@
               <tags-input element-id="tags"
                 v-model="selectedTags"
                 :input-id="'add-tags-input'"
-                :existing-tags="ext"
+                :existing-tags="existing_tags"
                 placeholder="Добавить категорию"
                 :discard-search-text="'Отменить результаты поиска'"
                 :id-field="'value'"
@@ -45,13 +45,13 @@
 <script>
   import { TagsInput } from '@seriouslag/vue-tagsinput';
   export default {
-    props: [],
+    props: ['all_tags'],
     data(){
       return {
         selectedTags: [],
         description: "",
-        tags: ['sadas'],
-        ext: [{value: 'asda'}]
+        tags: [],
+        existing_tags: []
       }
     },
     watch: {
@@ -70,6 +70,22 @@
     components: {
       TagsInput,
     },
+    created(){
+      if(this.edit_cell){
+        this.description = this.edit_cell.description
+        this.edit_cell.tags.forEach((item)=>{
+          this.selectedTags.push({value: item.name})
+        })
+      }
+      this.all_tags.forEach(item => {
+        this.existing_tags.push({value: item.name})
+      });
+      // console.log(this.edit_cell);
+    },
+    mounted(){
+      window.ss = this
+      console.log(this.all_tags)
+    },
     methods: {
       async submit(){
         if(this.edit_cell)
@@ -78,7 +94,6 @@
           this.addCell()
       },
       async editCell(){
-        console.log(this.edit_cell);
         const response = await this.$axios.$post("/handler.py", {
           action: "edit_cell",
           content: {
@@ -88,7 +103,7 @@
           }
         })
         if(response.status){
-          this.$emit("append", response.cell)
+          this.$emit("cell_update", response.cell)
           this.$store.commit("modal/close")
         }
       },
@@ -101,24 +116,11 @@
           }
         })
         if(response.status){
-          this.$emit("append", response.cell)
+          this.$emit("cell_append", response.cell)
           this.$store.commit("modal/close")
         }
       },
     },
-    created(){
-      if(this.edit_cell){
-        this.description = this.edit_cell.description
-        this.edit_cell.tags.forEach((item)=>{
-          this.selectedTags.push({value: item.name})
-        })
-      }
-      // console.log(this.edit_cell);
-    },
-    mounted(){
-      window.ss = this
-      console.log("mounted modal")
-    }
   }
 </script>
 

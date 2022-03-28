@@ -62,15 +62,35 @@ if os.environ.get("REQUEST_METHOD") == "POST":
     exit()
 
   if "action" in result:
+    if(result["action"] == "wiki"):
+      import wikipedia
+      # wikipedia.search("Митохондрия", results=2) # Ищет заголовки
+      wikipedia.set_lang("ru")
+      
+      # titles = wikipedia.search("Митохондрия", results=2) 
+      # suggest = wikipedia.suggest("Гугл") 
+      # summary = wikipedia.summary("Митохондрия",  sentences=5) 
+      page = wikipedia.page("Митохондрия") 
+      print(page.summary)
+      
+      print("<br>")
+      carousel = ""
+      # for image in page.images:
+        # carousel += f"<img src='{image}'>"
+      print(f"<img src='{page.images[0]}'>")
+      exit()
     if(result["action"] == "fetch_cells"):
       cells = db.fetch_cells()
-      cells = db.date_timestamp(cells)
+      tags = db.give_tags()
       result = {
         "status": True,
-        "cells": cells
+        "cells": cells,
+        "tags": tags
       }
+      result = db.date_timestamp(result)
       result = json.dumps(result)
       print(result)
+      db.connection.close()
       exit()
     if(result["action"] == "delete_cell"):
       count = db.remove_cell(result["cell_id"])
