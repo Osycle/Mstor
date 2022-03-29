@@ -12,6 +12,8 @@
 
 
 main{
+  min-height: calc(100vh - 46px);
+  background-color: white;
   &:before, &:after{
     content: "";
     clear: both;
@@ -19,21 +21,115 @@ main{
   }
 }
 
+.fixpanel{
+  position: fixed;
+  right: 30px;
+  bottom: 20px;
+  display: flex;
+  .btn-add{
+    background-color: $color-1;
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    height: 46px;
+    width: 46px;
+    transition: 0.2s ease;
+    box-shadow: 5px 5px 0px 2px black, 0px 0px 0px 3px black;
+    &:focus{
+      transform: translateY(-2px);
+      box-shadow: 10px 10px 0px -5px black, -0px -0px 0px 3px black;
+    }
+    svg{
+      width: 25px;
+      transition: 0.2s ease;
+      fill: $color-3;
+    }
+  }
+}
+.search{
+  margin-right: 20px;
+  .search-content{
+    position: relative;
+    border-bottom: 2px solid $color-1;
+    .icon-content{
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      line-height: 0;
+      svg{
+        fill: $color-1;
+      }
+    }
+    input{
+      width: 150px;
+      height: 36px;
+      padding: 5px 15px;
+      padding-left: 50px;
+    }
+  }
+  input{
+    padding-left: 50px;
+    background-color: transparent;
+    color: $color-1;
+    // &:focus~.icon-content{
+    //   svg{
+    //     fill: $color-2;
+    //   }
+    // }
+  }
+  .icon-content{
+    svg{
+      transition: 0.2s ease;
+      fill: $color-gray-4;
+    }
+  }
+}
+
+.main-wrapper{
+  display: flex;
+  margin-top: 50px;
+  // align-items: center;
+  .tags-main{
+    align-self: flex-start;
+    width: 250px;
+    flex-shrink: 0;
+    // margin-top: 20px;
+    margin-bottom: 20px;
+  }
+}
+.tags-main{
+  margin-left: 20px;
+  .tags-items{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .tag-item{
+    background-color: $color-1;
+    // border: 3px solid $color-gray-1;
+    margin-bottom: 1px;
+    margin-right: 1px;
+    color: $color-3;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}
 
 .cells{
-  margin-top: 50px;
-  margin-bottom: 50px;
-  //display: grid;
-  //grid-template-columns: repeat(12, 1fr);
-  //grid-gap: 10px;
   display: grid;
-  // ♣flex-wrap: wrap;
-  // ♣flex-direction: row;
+  grid-template-columns: repeat(7, calc(100%/7%)+#{"%"});
+ 
+}
+.cells-content{
+  overflow-y: auto;
+  height: calc(100vh - 150px);
+  padding-right: 5px;
 }
 .cell{
-  flex-shrink: 0;
   //flex-basis: 130px;    
-  margin: 10px;
+  margin: 0;
   font-size: 12px;
   position: relative;
   &:hover{
@@ -41,6 +137,12 @@ main{
       transform: scale(1);
       transition-delay: 0s;
     }
+  }
+  .btn-content{
+    // position: absolute;
+    // z-index: 1;
+    // left: 0;
+    // top: 0;
   }
   .date-content{
     display: none;
@@ -56,6 +158,7 @@ main{
     padding-top: 3px;
   }
   .btn-edit, .btn-del{
+    z-index: 1;
     background-color: #3d3f7e;
     width: 30px;
     height: 25px;
@@ -69,8 +172,8 @@ main{
   }
   .btn-edit{
     position: absolute;
-    bottom: -28px;
-    right: 30px;
+    bottom: 3px;
+    right: 3px;
     svg{
       fill: white;
       width: 18px;
@@ -85,8 +188,8 @@ main{
   }
   .btn-del{
     position: absolute;
-    bottom: -28px;
-    right: -3px;
+    top: 3px;
+    right: 3px;
     svg{
       fill: white;
       width: 16px;
@@ -96,17 +199,23 @@ main{
       background-color: rgb(158, 0, 0);
     }
   }
-
+  &:nth-child(1){
+    .cell-wrapper{
+      
+    }
+  }
+  .cell-wrapper{
+    border: 1px solid;
+    border-color: white;
+  }
 }
 .cell-wrapper{
   padding: 8px;
-  color: white;
-  width: 130px;
+  color: black;
+  //width: 130px;
   height: 130px;
-  background-color: $color-1;
+  background-color: #dadce3;
   position: relative;
-  //display: flex;
-  //align-items: center;
   &:after{
     // box-shadow: 5px 5px 0px -1px black, 0px 0px 0px 3px black;
   }
@@ -121,25 +230,6 @@ main{
   overflow: hidden;
 }
 
-.fixpanel{
-  position: fixed;
-  right: 30px;
-  bottom: 20px;
-  .btn-add{
-    background-color: $color-3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4px 8px;
-    transition: 0.2s ease;
-    @include hover-outshadow();
-    svg{
-      width: 25px;
-      transition: 0.2s ease;
-      fill: $color-1;
-    }
-  }
-}
 
 .tags-append{
   //display: none;
@@ -174,12 +264,14 @@ main{
     }
   }
 }
-input, textarea{
-  box-shadow: 5px 5px 0px 2px black, 0px 0px 0px 3px black;
-  transition: 0.2s ease;
-  &:focus{
-    transform: translateY(-2px);
-    box-shadow: 10px 10px 0px -5px black, -0px -0px 0px 3px black;
+.input-content{
+  input, textarea{
+    box-shadow: 5px 5px 0px 2px black, 0px 0px 0px 3px black;
+    transition: 0.2s ease;
+    &:focus{
+      transform: translateY(-2px);
+      box-shadow: 10px 10px 0px -5px black, -0px -0px 0px 3px black;
+    }
   }
 }
 
@@ -228,6 +320,7 @@ input, textarea{
   overflow: hidden;
   width: 146px;
   position: relative;
+  display: none;
   &:before{
     content: "";
     width: 100%;
@@ -247,7 +340,6 @@ input, textarea{
     padding: 1px 4px;
     color: $color-1;
     position: relative;
-    @include shadow-border;
   }
 }
 
