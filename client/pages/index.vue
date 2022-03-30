@@ -109,6 +109,7 @@ export default {
   methods: {
 
     parseText(string){
+      return string;
       window.pattern_link = /(https?:\/\/|ftps?:\/\/|www\.)((?![.,?!;:()]*(\s|$))[^\s]){2,}/gim
       string = string.replace(pattern_link, function(a){
         console.log(11111111,a)

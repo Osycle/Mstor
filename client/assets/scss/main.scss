@@ -214,8 +214,9 @@ main{
   color: black;
   //width: 130px;
   height: 130px;
-  background-color: #dadce3;
+  background-color: $color-5;
   position: relative;
+  overflow-y: auto;
   &:after{
     // box-shadow: 5px 5px 0px -1px black, 0px 0px 0px 3px black;
   }

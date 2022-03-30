@@ -14,7 +14,17 @@
           </div>
           <div class="modal-content">
             <div class="text-content">
-              <textarea name="" id="" v-model="description"></textarea>
+              <client-only>
+                <!-- 
+                  :editor-toolbar="customToolbar" 
+                  :customModules="customModulesForEditor"
+                -->
+                <VueEditor 
+                  v-model="description" 
+                  
+                  :editorOptions="editorSettings"/>
+              </client-only>
+              <!-- <textarea name="" id="" v-model="description"></textarea> -->
             </div>
             <div class="tags-append">
               <tags-input element-id="tags"
@@ -44,6 +54,20 @@
 
 <script>
   import { TagsInput } from '@seriouslag/vue-tagsinput';
+
+  // import { ImageDrop } from "quill-image-drop-module";
+  // import ImageResize from "quill-image-resize-module";
+
+// Quill.register("modules/imageDrop", ImageDrop);
+
+//   import { VueEditor } from "vue2-editor";
+// import { ImageDrop } from "quill-image-drop-module";
+// import ImageResize from "quill-image-resize-module";
+  if (process.browser) {
+    console.log(99999999999999)
+    Quill.register('modules/imageResize', ImageResize)
+  }
+
   export default {
     props: ['all_tags'],
     data(){
@@ -51,7 +75,22 @@
         selectedTags: [],
         description: "",
         tags: [],
-        existing_tags: []
+        existing_tags: [],
+        customToolbar: [
+          ["bold", "italic", "underline"],
+          [{ list: "ordered" }, { list: "bullet" }],
+          ["image", "code-block"]
+        ],
+        customModulesForEditor: [
+          //{ alias: "imageDrop", module: ImageDrop },
+          // { alias: "imageResize", module: ImageResize }
+        ],
+        editorSettings: {
+          modules: {
+            //imageDrop: true,
+            imageResize: {}
+          }
+        }
       }
     },
     watch: {
@@ -60,6 +99,9 @@
         items.forEach(item => {
           this.tags.push(item.value)
         });
+      },
+      description(a, s, r){
+        console.log(a, s, r)
       }
     },
     computed: {
@@ -124,7 +166,24 @@
   }
 </script>
 
+<style lang="scss">
+  .ql-toolbar{
+    background-color: white;
+  }
+  .modal-content .ql-editor{
+    background-color: white;
+    color: black;
+    overflow-y: auto;
+    height: calc(100vh - 330px);
+  }
+  .ql-container{
+    
+    // max-height: calc(100vh - 300px);
+  }
+</style>
+
 <style lang="scss" scoped>
+
   .modal{
     position: fixed;
     width: 100%;
@@ -141,7 +200,8 @@
     height: 100%;
   }
   .modal-container{
-    width: 600px;
+    width: calc(100% - 330px);
+    max-width: 900px;
     padding: 0;
   }
   .modal-header{
@@ -154,7 +214,6 @@
     //padding: 20px;
     margin: auto;
     .text-content{
-      display: flex;
       position: relative;
     }
     textarea{
@@ -236,5 +295,8 @@
     //border-left: var(--border-def);
     @include hover-outshadow();
   }
+
+
+
 </style>
 

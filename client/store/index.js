@@ -1,6 +1,5 @@
 
 import Vue from 'vue';
-//import "@/static/scss/_common.scss";
 
 
 //import VoerroTagsInput from '@voerro/vue-tagsinput';
