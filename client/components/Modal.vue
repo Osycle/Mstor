@@ -18,11 +18,12 @@
                 <!-- 
                   :editor-toolbar="customToolbar" 
                   :customModules="customModulesForEditor"
+                  :editorOptions="editorSettings"
                 -->
                 <VueEditor 
                   v-model="description" 
-                  
-                  :editorOptions="editorSettings"/>
+                  :editorOptions="editorSettings"
+                  />
               </client-only>
               <!-- <textarea name="" id="" v-model="description"></textarea> -->
             </div>
@@ -55,18 +56,6 @@
 <script>
   import { TagsInput } from '@seriouslag/vue-tagsinput';
 
-  // import { ImageDrop } from "quill-image-drop-module";
-  // import ImageResize from "quill-image-resize-module";
-
-// Quill.register("modules/imageDrop", ImageDrop);
-
-//   import { VueEditor } from "vue2-editor";
-// import { ImageDrop } from "quill-image-drop-module";
-// import ImageResize from "quill-image-resize-module";
-  if (process.browser) {
-    console.log(99999999999999)
-    Quill.register('modules/imageResize', ImageResize)
-  }
 
   export default {
     props: ['all_tags'],
@@ -81,13 +70,9 @@
           [{ list: "ordered" }, { list: "bullet" }],
           ["image", "code-block"]
         ],
-        customModulesForEditor: [
-          //{ alias: "imageDrop", module: ImageDrop },
-          // { alias: "imageResize", module: ImageResize }
-        ],
         editorSettings: {
           modules: {
-            //imageDrop: true,
+            imageDrop: true,
             imageResize: {}
           }
         }
@@ -101,7 +86,7 @@
         });
       },
       description(a, s, r){
-        console.log(a, s, r)
+        // console.log(a, s, r)
       }
     },
     computed: {
@@ -200,8 +185,8 @@
     height: 100%;
   }
   .modal-container{
-    width: calc(100% - 330px);
-    max-width: 900px;
+    // width: calc(100% - 330px);
+    max-width: 75%;
     padding: 0;
   }
   .modal-header{

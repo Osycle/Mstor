@@ -35,6 +35,7 @@
             </div>
           </div>
         </div>
+        <!-- <a href="https://renault.uz/uploads/sections/7/section-original-301x156.png" data-fancybox>sdad</a> -->
         <div class="tags-main">
           <div class="wrapper">
             <div class="tags-items">
@@ -109,7 +110,18 @@ export default {
   methods: {
 
     parseText(string){
+      var pattern_link = /(https?:\/\/|ftps?:\/\/|www\.)((?![.,?!;:()]*(\s|$))[^\s]){2,}/gim
+      var string_match = string.match(pattern_link)
+      // console.log(string.match(/<iframe.+<\/iframe>/gim))
+      var iframe_text = string.match(/<iframe.+<\/iframe>/gim)
+      if(iframe_text)
+        string.match(/<iframe.+<\/iframe>/gim).forEach(text_path => {
+          var link = text_path.match(/src="(https?.+)"/im)[1]
+          string = string.replace(text_path, "<a href="+link+" data-fancybox>"+"Откр"+"</a>")
+          console.log(link)
+        });
       return string;
+
       window.pattern_link = /(https?:\/\/|ftps?:\/\/|www\.)((?![.,?!;:()]*(\s|$))[^\s]){2,}/gim
       string = string.replace(pattern_link, function(a){
         console.log(11111111,a)

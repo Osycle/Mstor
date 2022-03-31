@@ -2,12 +2,14 @@
   <header id="header" class="header">
     <div class="header-wrapper">
       <div class="header-content">
-        <!-- <nuxt-link to="/test" style="color: white;">Тест</nuxt-link> -->
+        
         <div class="panel-top">
           <div class="panel-user">
-            <div class="img-content">
-              <img src="/img/user/avatar.jpg" alt="">
-            </div>
+            <nuxt-link to="/test">
+              <div class="img-content">
+                <img src="/img/user/avatar.jpg" alt="">
+              </div>
+            </nuxt-link>
           </div>
         </div>
       </div>
