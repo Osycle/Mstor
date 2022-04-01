@@ -109,25 +109,71 @@ export default {
   },
   methods: {
 
-    parseText(string){
-      var pattern_link = /(https?:\/\/|ftps?:\/\/|www\.)((?![.,?!;:()]*(\s|$))[^\s]){2,}/gim
-      var string_match = string.match(pattern_link)
-      // console.log(string.match(/<iframe.+<\/iframe>/gim))
-      var iframe_text = string.match(/<iframe.+<\/iframe>/gim)
-      if(iframe_text)
-        string.match(/<iframe.+<\/iframe>/gim).forEach(text_path => {
-          var link = text_path.match(/src="(https?.+)"/im)[1]
-          string = string.replace(text_path, "<a href="+link+" data-fancybox>"+"Откр"+"</a>")
-          console.log(link)
-        });
-      return string;
+    parse_media(string){
+      const pattern_media = /<iframe.+?><\/iframe>|<img.+?>/gim;
+      const pattern_iframe = /<iframe.+?><\/iframe>/gim;
+      const pattern_img = /<img.+?>/gim;
+      let media = string.match(pattern_media)
+      let out_content = ""
+      if(!media)
+        return string;
 
-      window.pattern_link = /(https?:\/\/|ftps?:\/\/|www\.)((?![.,?!;:()]*(\s|$))[^\s]){2,}/gim
-      string = string.replace(pattern_link, function(a){
-        console.log(11111111,a)
-        return "<a href='#'>"+a+"</a>"
+      media.forEach(function(text_path, i){
+        pattern_iframe.lastIndex = 0
+        pattern_img.lastIndex = 0
+        let new_content = "";
+        let link = text_path.match(/src=\"(.*?)\"/im)[1];
+        if(pattern_iframe.test(text_path)){
+          if(/youtube/.test(text_path)){
+            var code = text_path.match(/embed\/(.+)\?/im)[1]
+            new_content = `
+              <a href="${link}" data-fancybox class='cell-yt-link cell-media-link content-iframe'>
+                <img src="https://i.ytimg.com/vi/${code}/hqdefault.jpg">
+              </a>
+            `
+          }else{
+            new_content = `
+              <a href="${link}" data-fancybox class='cell-media-link content-iframe'>
+                <video src="${link}">
+              </a>
+            `
+          }
+        }
+        if(pattern_img.test(text_path)){
+          new_content = `
+            <a href="${link}" data-fancybox class='cell-media-link content-img'>
+              <img src="${link}">
+            </a>
+          `
+        }
+        out_content += new_content
       })
-      var string_match = string.match(pattern_link)
+      string = string.replace(pattern_media, "")
+      string = string+"<div class='media-content'>"+out_content+"</div>"
+      return string;
+    },
+    parseLinks(string){
+      const pattern_a = /<a.+?>/gim;
+      let out_content = ""
+      let links = string.match(pattern_a);
+      if(links)
+        links.forEach(function(text_path){
+          pattern_a.lastIndex = 0
+          let link = text_path.match(/href=\"(.*?)\"/im)[1]
+          let new_content = `
+            <a href="${link}" target='_blank'>
+              ${link}
+            </a>
+          `
+          out_content += new_content
+        })
+      string = string.replace(pattern_a, "")
+      string = string+"<div class='links-content'>"+out_content+"</div>"
+      return string;
+    },
+    parseText(string){
+      string = this.parseLinks(string)
+      string = this.parse_media(string)
       return string;
     },
     cell_append(cell){
