@@ -19,9 +19,9 @@
                 <div class="date-content">
                   {{ new Date(cell.date_time*1000) | dateFormat('D MMMM YYYY')}}
                 </div>
-                <div class="text-content">
+                <div class="content">
                   <!-- <nuxt-link :to="'/cell/'+cell.id">Далее</nuxt-link> -->
-                  <div v-html="parseText(cell.description)"></div>
+                  <div v-html="parseText(cell.description)" class="content-wrapper"></div>
                 </div>
               </div>
               <div class="btn-content">
@@ -156,24 +156,28 @@ export default {
       const pattern_a = /<a.+?>/gim;
       let out_content = ""
       let links = string.match(pattern_a);
-      if(links)
-        links.forEach(function(text_path){
-          pattern_a.lastIndex = 0
-          let link = text_path.match(/href=\"(.*?)\"/im)[1]
-          let new_content = `
-            <a href="${link}" target='_blank'>
-              ${link}
-            </a>
-          `
-          out_content += new_content
-        })
+      if(!links)
+        return string;
+      links.forEach(function(text_path){
+        pattern_a.lastIndex = 0
+        let link = text_path.match(/href=\"(.*?)\"/im)[1]
+        let new_content = `
+          <a href="${link}" target='_blank'>
+            ${link}
+          </a>
+        `
+        out_content += new_content
+      })
       string = string.replace(pattern_a, "")
       string = string+"<div class='links-content'>"+out_content+"</div>"
       return string;
     },
     parseText(string){
-      string = this.parseLinks(string)
-      string = this.parse_media(string)
+      string = "<div class='text-content'>"+string+"</div>"
+      string = this.parseLinks(string);
+      string = this.parse_media(string);
+      string = string.replace(/<p><br><\/p>|<p><\/p>/gim, "");
+      // string = newstr+string
       return string;
     },
     cell_append(cell){
