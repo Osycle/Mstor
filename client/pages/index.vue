@@ -25,10 +25,13 @@
                 </div>
               </div>
               <div class="btn-content">
-                <button type="button" class="btn-edit" title="Редактировать" @click="editCell(cell)">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 101 101"><path d="M82.2 79.2H18.8c-1.3 0-2.4 1.1-2.4 2.4s1.1 2.4 2.4 2.4h63.4c1.3 0 2.4-1.1 2.4-2.4s-1.1-2.4-2.4-2.4zM16.5 58.2l-.1 11.3c0 .6.2 1.3.7 1.7.5.4 1.1.7 1.7.7l11.3-.1c.6 0 1.2-.3 1.7-.7l38.8-38.8c.9-.9.9-2.5 0-3.4L59.4 17.7c-.9-.9-2.5-.9-3.4 0l-7.8 7.8-31 31c-.5.5-.7 1.1-.7 1.7zm49-27.6L61.1 35l-7.8-7.8 4.4-4.4 7.8 7.8zM21.3 59.2l28.6-28.6 7.8 7.8L29.1 67h-7.8v-7.8z"/></svg>
+                <button type="button" class="btn btn-views" title="Больше">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path d="m 16,7.980468 c -3.78678,0 -7.22322,1.04576 -9.76953,2.80859 C 3.68416,12.551898 2,15.099848 2,17.980468 a 1.0000999,1.0000999 0 1 0 2,0 c 0,-2.10538 1.21595,-4.05621 3.36914,-5.54687 2.15319,-1.49067 5.21564,-2.45313 8.63086,-2.45313 3.41522,0 6.47962,0.96246 8.63281,2.45313 C 26.786,13.924258 28,15.875088 28,17.980468 a 1.0000999,1.0000999 0 1 0 2,0 c 0,-2.88062 -1.6822,-5.42857 -4.22852,-7.19141 C 23.22517,9.026228 19.78678,7.980468 16,7.980468 Z" color="currentColor" font-family="sans-serif" font-weight="400" overflow="visible" style="line-height:normal;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:currentColor;text-transform:none;text-orientation:mixed;shape-padding:0;isolation:auto;mix-blend-mode:normal"/><path d="m 16,13.980468 c -2.74958,0 -5,2.25042 -5,5 0,2.74958 2.25042,5 5,5 2.74958,0 5,-2.25042 5,-5 0,-2.74958 -2.25042,-5 -5,-5 z m 0,2 c 1.6687,0 3,1.3313 3,3 0,1.6687 -1.3313,3 -3,3 -1.6687,0 -3,-1.3313 -3,-3 0,-1.6687 1.3313,-3 3,-3 z" color="currentColor" font-family="sans-serif" font-weight="400" overflow="visible" style="line-height:normal;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:currentColor;text-transform:none;text-orientation:mixed;shape-padding:0;isolation:auto;mix-blend-mode:normal"/></svg>
                 </button>
-                <button type="button" class="btn-del" title="Удалить" @click.once="delCell(cell)">
+                <button type="button" class="btn btn-edit" title="Редактировать" @click="editCell(cell)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M17.864 3.60051C17.4735 3.20999 16.8403 3.20999 16.4498 3.60051L15.0356 5.01472 19.2782 9.25736 20.6924 7.84315C21.0829 7.45263 21.0829 6.81946 20.6924 6.42894L17.864 3.60051zM17.864 10.6716L13.6213 6.42894 4.72185 15.3284C4.53431 15.516 4.42896 15.7703 4.42896 16.0355L4.42896 18.864C4.42895 19.4163 4.87667 19.864 5.42896 19.864H8.25738C8.5226 19.864 8.77695 19.7586 8.96449 19.5711L17.864 10.6716z"/></svg>
+                </button>
+                <button type="button" class="btn btn-del" title="Удалить" @click.once="delCell(cell)">
                   <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M19.8534546,19.1465454L12.7069092,12l7.1465454-7.1465454c0.1871948-0.1937256,0.1871948-0.5009155,0-0.6947021c-0.1918335-0.1986084-0.5083618-0.2041016-0.7069702-0.0122681l-7.1465454,7.1465454L4.8534546,4.1465454c-0.1937256-0.1871338-0.5009155-0.1871338-0.6947021,0C3.960144,4.3383789,3.9546509,4.6549072,4.1464844,4.8535156L11.2929688,12l-7.1464844,7.1464844c-0.09375,0.09375-0.1464233,0.2208862-0.1464233,0.3534546C4,19.776062,4.223877,19.999939,4.5,20c0.1326294,0.0001221,0.2598267-0.0526123,0.3534546-0.1465454l7.1464844-7.1464844l7.1465454,7.1465454C19.2401123,19.9474487,19.3673706,20.0001831,19.5,20c0.1325073-0.000061,0.2595825-0.0526733,0.3533325-0.1463623C20.048645,19.6583862,20.0487061,19.3417969,19.8534546,19.1465454z"/></svg>
                 </button>
               </div>
@@ -87,6 +90,10 @@ export default {
   },
   async mounted(){
     window.vm_index = this;
+    $(document).off("click.more", ".btn-views")
+    $(document).on("click.more", ".btn-views", function(){
+      $(this).closest(".cell").find(".content-detail").toggleClass("active");
+    })
   },
   async asyncData(context){
     try{
@@ -116,7 +123,7 @@ export default {
       let media = string.match(pattern_media)
       let out_content = ""
       if(!media)
-        return string;
+        return "";
 
       media.forEach(function(text_path, i){
         pattern_iframe.lastIndex = 0
@@ -148,16 +155,14 @@ export default {
         }
         out_content += new_content
       })
-      string = string.replace(pattern_media, "")
-      string = string+"<div class='media-content'>"+out_content+"</div>"
-      return string;
+      return "<div class='media-content'>"+out_content+"</div>";
     },
-    parseLinks(string){
+    parse_links(string){
       const pattern_a = /<a.+?>/gim;
       let out_content = ""
       let links = string.match(pattern_a);
       if(!links)
-        return string;
+        return "";
       links.forEach(function(text_path){
         pattern_a.lastIndex = 0
         let link = text_path.match(/href=\"(.*?)\"/im)[1]
@@ -168,15 +173,22 @@ export default {
         `
         out_content += new_content
       })
-      string = string.replace(pattern_a, "")
-      string = string+"<div class='links-content'>"+out_content+"</div>"
-      return string;
+      return "<div class='links-content'>"+out_content+"</div>";
     },
     parseText(string){
       string = "<div class='text-content'>"+string+"</div>"
-      string = this.parseLinks(string);
-      string = this.parse_media(string);
+      let tpl_links = this.parse_links(string);
+      let tpl_media = this.parse_media(string);
+      string = string.replace(/<p><br><\/p>|<p><\/p>|<a.+?>|<iframe.+?><\/iframe>|<img.+?>/gim, "");
       string = string.replace(/<p><br><\/p>|<p><\/p>/gim, "");
+      string += `
+        <div class="content-detail">
+          ${tpl_links}
+          ${tpl_media}
+        </div>`
+
+
+      
       // string = newstr+string
       return string;
     },

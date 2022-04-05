@@ -13,7 +13,7 @@
 
 main{
   min-height: calc(100vh - 46px);
-  background-color: white;
+  background-color: #1d202e;
   &:before, &:after{
     content: "";
     clear: both;
@@ -136,16 +136,26 @@ main{
 }
 .cell-wrapper{
   padding: 0;
-  background-color: $color-1;
-  border: 1px solid;
-  border-color: white;
+  background-color: $color-5;
   //width: 130px;
   // min-height: 130px;
   // max-height: 200px;
   height: 200px;
-  color: $color-5;
   position: relative;
   // overflow-y: auto;
+  &:before{
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    box-shadow: inset 0px 0px 1px black;
+    left: 0;
+    top: 0;
+    border-color: white;
+    z-index: 1;
+    pointer-events: none;
+  }
 }
 .cell{
   //flex-basis: 130px;    
@@ -161,10 +171,22 @@ main{
     background-color: #f1f1f1;
     pointer-events: none;
   }
+  .btn{
+    transition: 0.1s ease;
+    // transform: scale(0);
+    opacity: 0;
+    // transition-delay: 0.15s;
+  }
   &:hover{
-    .btn-edit, .btn-del{
-      transform: scale(1);
+    .btn{
+      
+      // transform: scale(1);
+      background-color: #3f414c;
+      opacity: 1;
       transition-delay: 0s;
+    }
+    .cell-wrapper{
+      background-color: #3f414c;
     }
   }
   .content{
@@ -176,17 +198,48 @@ main{
     flex-direction: column;
     height: inherit;
   }
+  .content-detail{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    background: rgba(black, 0.9);
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    pointer-events: none;
+    &.active{
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
   .text-content{
     max-width: 100%;
     overflow: hidden;
-    padding: 10px 10px;
+    padding: 15px 15px;
+    padding-right: 20px;
     height: 100%;
     min-height: 50%;
+    color: white;
+    &:before{
+      content: "";
+      bottom: 0;
+      left: 0;
+      // background-color: $color-5;
+      background-image: linear-gradient(to bottom, transparent, $color-5 85%);
+      width: 100%;
+      height: 80px;
+      position: absolute;
+      display: block;
+      pointer-events: none;
+    }
     pre{
       margin-top: 5px;
       margin-bottom: 5px;
       background-color: transparent;
-      font-size: 9px;
+      font-size: 11px;
       padding: 5px;
       overflow: hidden;
       &::-webkit-scrollbar {
@@ -278,26 +331,19 @@ main{
     font-size: 11px;
     margin-bottom: 5px;
   }
-  .btn-edit, .btn-del{
-    z-index: 1;
-    background-color: #3d3f7e;
+
+  .btn-edit, .btn-del, .btn-views{
+    z-index: 2;
+    // background-color: #3d3f7e;
+    position: absolute;
     width: 30px;
     height: 25px;
-    transition: 0.3s ease;
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    transform: scale(0);
-    transition-delay: 0.1s;
-  }
-  .btn-edit{
-    position: absolute;
-    bottom: 3px;
-    right: 3px;
     svg{
       fill: white;
-      width: 18px;
       transition: 0.3s ease;
     }
     &:hover{
@@ -307,17 +353,40 @@ main{
       }
     }
   }
-  .btn-del{
+  .btn-views{
+    z-index: 4;
+    color: $color-3;
     position: absolute;
-    top: 3px;
-    right: 3px;
+    bottom: 0;
+    left: 0;
     svg{
       fill: white;
-      width: 16px;
+      width: 18px;
       transition: 0.3s ease;
     }
+  }
+  .btn-edit{
+    bottom: 0;
+    right: 0;
+    svg{
+      width: 18px;
+    }
     &:hover{
-      background-color: rgb(158, 0, 0);
+      background-color: $color-3;
+    }
+  }
+  .btn-del{
+    top: 0;
+    right: 0;
+    width: 30px;
+    svg{
+      width: 16px;
+    }
+    &:hover{
+      svg{
+        fill: white;
+      }
+      background-color: rgb(214, 6, 6);
     }
   }
 }
