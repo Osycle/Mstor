@@ -39,10 +39,11 @@ export default {
 <style lang="scss">
   .header{
     overflow: hidden;
+    position: fixed;
+    right: 30px;
+    top: 20px;
     .header-wrapper{
       height: 40px;
-      padding-left: 60px;
-      padding-right: 60px;
       width: 100%;
       background-color: $color-1;
       // align-items: center;

@@ -5,6 +5,15 @@
       @cell_update="cell_update" 
       :all_tags="all_tags"
       v-if="$store.state.modal.status"/>
+    <div class="tags-main">
+      <div class="tags-items">
+        <div v-for="(tag, key) in all_tags" :key="key" v-if="key<8" class="tag-item">
+          <span role="button" class="tag-link">
+            {{tag.name}}
+          </span>
+        </div>
+      </div>
+    </div>
     <div class="container-fluid">
       <div class="main-wrapper">
         <div class="cells-content">
@@ -34,16 +43,6 @@
                 <button type="button" class="btn btn-del" title="Удалить" @click.once="delCell(cell)">
                   <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M19.8534546,19.1465454L12.7069092,12l7.1465454-7.1465454c0.1871948-0.1937256,0.1871948-0.5009155,0-0.6947021c-0.1918335-0.1986084-0.5083618-0.2041016-0.7069702-0.0122681l-7.1465454,7.1465454L4.8534546,4.1465454c-0.1937256-0.1871338-0.5009155-0.1871338-0.6947021,0C3.960144,4.3383789,3.9546509,4.6549072,4.1464844,4.8535156L11.2929688,12l-7.1464844,7.1464844c-0.09375,0.09375-0.1464233,0.2208862-0.1464233,0.3534546C4,19.776062,4.223877,19.999939,4.5,20c0.1326294,0.0001221,0.2598267-0.0526123,0.3534546-0.1465454l7.1464844-7.1464844l7.1465454,7.1465454C19.2401123,19.9474487,19.3673706,20.0001831,19.5,20c0.1325073-0.000061,0.2595825-0.0526733,0.3533325-0.1463623C20.048645,19.6583862,20.0487061,19.3417969,19.8534546,19.1465454z"/></svg>
                 </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- <a href="https://renault.uz/uploads/sections/7/section-original-301x156.png" data-fancybox>sdad</a> -->
-        <div class="tags-main">
-          <div class="wrapper">
-            <div class="tags-items">
-              <div v-for="(tag, key) in all_tags" :key="key" class="tag-item" role="button">
-                <span>{{tag.name}}</span>
               </div>
             </div>
           </div>
@@ -82,18 +81,23 @@ export default {
       test: [],
       data: null,
       cells: [],
-      all_tags: []
+      all_tags: [],
     }
   },
   compontents:{
-    Modal
+    Modal,
   },
   async mounted(){
     window.vm_index = this;
+
+    
     $(document).off("click.more", ".btn-views")
     $(document).on("click.more", ".btn-views", function(){
       $(this).closest(".cell").find(".content-detail").toggleClass("active");
     })
+
+    var owl = $('.owl-carousel');
+
   },
   async asyncData(context){
     try{
@@ -115,7 +119,14 @@ export default {
 
   },
   methods: {
-
+    wheel(){
+      console.log(11)
+      if (e.deltaY>0) {
+          this.trigger('next.owl');
+      } else {
+          this.trigger('prev.owl');
+      }
+    },
     parse_media(string){
       const pattern_media = /<iframe.+?><\/iframe>|<img.+?>/gim;
       const pattern_iframe = /<iframe.+?><\/iframe>/gim;
@@ -155,7 +166,13 @@ export default {
         }
         out_content += new_content
       })
-      return "<div class='media-content'>"+out_content+"</div>";
+      return `
+        <div class="media-content">
+          <div class="wrapper">
+            ${out_content}
+          </div>
+        </div>
+      `;
     },
     parse_links(string){
       const pattern_a = /<a.+?>/gim;

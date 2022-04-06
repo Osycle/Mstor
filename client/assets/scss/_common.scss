@@ -1,24 +1,6 @@
 
 
-:root{
-  --color-1: #202b60;
-  --color-2: #6881ff;
-  --color-3: #7fffd4;
-  --color-4: #3b356c;
-  --color-5: #282934;
-  --color-red: #d71515;
-  --color-black: #000000;
-  --color-gray: #efefef;
-  --color-gray-1: #f2f2f2;
-  --color-gray-2: #efefef;
-  --color-gray-3: #cccccc;
-  --color-gray-4: #9BA1A5;
-  --color-gray-5: #697279;
-  --color-gray-6: #37434C;
-  --border-def: 3px solid var(--color-black);
-  --animation-sir: shadow-in-rotate 2s linear 0s infinite;
-  --animation-sor: shadow-out-rotate 0.4s linear 0s infinite;
-}
+
 
 /* ANIMAIONS */
 @keyframes shadow-in-rotate{
@@ -55,22 +37,17 @@
 ::-webkit-scrollbar{
 	width: 3px;
 	position: absolute;
-	height: 5px;
+	height: 3px;
 }
  ::-webkit-scrollbar-thumb{
- 	border-radius: 5px;
  	z-index: 500;
-	background-color: lighten(#202b60, 0%);
-}
-::-webkit-scrollbar-thumb:hover{
-	background-color: darken(#202b60, 5%);
-} 
-::-webkit-scrollbar-thumb:active{
-	background-color: darken(#202b60, 10%);
+	background-color: $color-3;
+  &:hover, &:active{
+    background-color: $color-3;
+  }
 }
 ::-webkit-scrollbar-track-piece{
-	background-color: white;
-	border-radius: 5px;
+	background-color: transparent;
 }
 // OPERA
 ::-o-scrollbar{
@@ -78,23 +55,17 @@
 	position: absolute;
 }
 ::-o-scrollbar-thumb{
-	z-index: 500;
-	border-radius: 5px;
-	background-color: lighten(#202b60, 5%);
-}
-::-o-scrollbar-thumb:hover{
-	background-color: darken(#202b60, 5%);
-} 
-::-o-scrollbar-thumb:active{
-	background-color: darken(#202b60, 10%);
+	background-color: $color-3;
+  &:hover, &:active{
+    background-color: $color-3;
+  }
 }
 ::-o-scrollbar-track-piece{
-	border-radius: 5px;
-	background-color: white;
+	background-color: transparent;
 }
 ::selection {
-    background: $color-1;
-    color: #fff;
+    background: $color-3;
+    color: $color-1;
     text-shadow: none;
 }
 

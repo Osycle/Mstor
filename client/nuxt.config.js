@@ -33,6 +33,7 @@ export default {
     { src: '~/plugins/lodash.js' },
     { src: '~/plugins/vue-tagsinput.js' },
     { src: '~/plugins/vue-filter-date-format.js' },
+    { src: '~/plugins/owl.js', ssr: false },
     { src: '~/plugins/vue2-editor.js', ssr: false },
   ],
   // Auto import components: https://go.nuxtjs.dev/config-components
