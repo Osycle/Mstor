@@ -236,4 +236,13 @@ class Db:
       print("Error edit_cell")
     finally:
       self.connection.close()
-    
+  
+  def search(self, query):
+    try:
+      sql = f"SELECT * FROM {self.tn_cells} WHERE description LIKE '%{query}%'"
+      self.cursor.execute(sql)
+      return self.cursor.fetchall()
+    except:
+      print("Error search")
+    finally:
+      self.connection.close()

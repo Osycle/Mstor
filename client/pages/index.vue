@@ -18,7 +18,7 @@
       <div class="main-wrapper">
         <div class="cells-content">
           <div class="cells">
-            <div class="cell" v-for="(cell, key) in cells" :key="key">
+            <div class="cell a-scale" v-for="(cell, key) in cells" :key="key" :style="'--i: '+key">
               <div class="tags-content">
                 <span v-for="(item, key) in cell.tags" :key="key" class="tags-item">
                   {{item.name}}
@@ -40,7 +40,7 @@
                 <button type="button" class="btn btn-edit" title="Редактировать" @click="editCell(cell)">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M17.864 3.60051C17.4735 3.20999 16.8403 3.20999 16.4498 3.60051L15.0356 5.01472 19.2782 9.25736 20.6924 7.84315C21.0829 7.45263 21.0829 6.81946 20.6924 6.42894L17.864 3.60051zM17.864 10.6716L13.6213 6.42894 4.72185 15.3284C4.53431 15.516 4.42896 15.7703 4.42896 16.0355L4.42896 18.864C4.42895 19.4163 4.87667 19.864 5.42896 19.864H8.25738C8.5226 19.864 8.77695 19.7586 8.96449 19.5711L17.864 10.6716z"/></svg>
                 </button>
-                <button type="button" class="btn btn-del" title="Удалить" @click.once="delCell(cell)">
+                <button type="button" class="btn btn-del" title="Удалить" @click="delCell(cell)">
                   <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M19.8534546,19.1465454L12.7069092,12l7.1465454-7.1465454c0.1871948-0.1937256,0.1871948-0.5009155,0-0.6947021c-0.1918335-0.1986084-0.5083618-0.2041016-0.7069702-0.0122681l-7.1465454,7.1465454L4.8534546,4.1465454c-0.1937256-0.1871338-0.5009155-0.1871338-0.6947021,0C3.960144,4.3383789,3.9546509,4.6549072,4.1464844,4.8535156L11.2929688,12l-7.1464844,7.1464844c-0.09375,0.09375-0.1464233,0.2208862-0.1464233,0.3534546C4,19.776062,4.223877,19.999939,4.5,20c0.1326294,0.0001221,0.2598267-0.0526123,0.3534546-0.1465454l7.1464844-7.1464844l7.1465454,7.1465454C19.2401123,19.9474487,19.3673706,20.0001831,19.5,20c0.1325073-0.000061,0.2595825-0.0526733,0.3533325-0.1463623C20.048645,19.6583862,20.0487061,19.3417969,19.8534546,19.1465454z"/></svg>
                 </button>
               </div>
@@ -53,7 +53,7 @@
     <div class="fixpanel">
       <div id="search" class="search">
         <div class="search-content">
-          <input type="text" name="">
+          <input type="text" name="" @keyup="search(search_query, $event)" v-model="search_query">
           <div class="icon-content">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"><path d="M19.7555474,18.6065254 L16.3181544,15.2458256 L16.3181544,15.2458256 L16.2375905,15.1233001 C16.0877892,14.9741632 15.8829641,14.8901502 15.6691675,14.8901502 C15.4553709,14.8901502 15.2505458,14.9741632 15.1007444,15.1233001 L15.1007444,15.1233001 C12.1794834,17.8033337 7.6781476,17.94901 4.58200492,15.4637171 C1.48586224,12.9784243 0.75566836,8.63336673 2.87568494,5.31016931 C4.99570152,1.9869719 9.30807195,0.716847023 12.9528494,2.34213643 C16.5976268,3.96742583 18.4438102,7.98379036 17.2670181,11.7275931 C17.182269,11.9980548 17.25154,12.2921761 17.4487374,12.4991642 C17.6459348,12.7061524 17.9410995,12.794561 18.223046,12.7310875 C18.5049924,12.667614 18.7308862,12.4619014 18.8156353,12.1914397 L18.8156353,12.1914397 C20.2223941,7.74864367 18.0977423,2.96755391 13.8161172,0.941057725 C9.53449216,-1.08543846 4.38083811,0.250823958 1.68905427,4.08541671 C-1.00272957,7.92000947 -0.424820906,13.1021457 3.0489311,16.2795011 C6.5226831,19.4568565 11.8497823,19.6758854 15.5841278,16.7948982 L18.6276529,19.7705177 C18.9419864,20.0764941 19.4501654,20.0764941 19.764499,19.7705177 C20.0785003,19.4602048 20.0785003,18.9605974 19.764499,18.6502845 L19.764499,18.6502845 L19.7555474,18.6065254 Z"/></svg>
           </div>
@@ -81,6 +81,7 @@ export default {
       test: [],
       data: null,
       cells: [],
+      search_query: "",
       all_tags: [],
     }
   },
@@ -104,6 +105,7 @@ export default {
       const data = await context.store.dispatch("trans/query", { action: "fetch_cells" })
       return {
         cells: data.cells,
+        cells_init: data.cells,
         all_tags: data.tags,
       }
     }catch(e){
@@ -119,14 +121,6 @@ export default {
 
   },
   methods: {
-    wheel(){
-      console.log(11)
-      if (e.deltaY>0) {
-          this.trigger('next.owl');
-      } else {
-          this.trigger('prev.owl');
-      }
-    },
     parse_media(string){
       const pattern_media = /<iframe.+?><\/iframe>|<img.+?>/gim;
       const pattern_iframe = /<iframe.+?><\/iframe>/gim;
@@ -212,6 +206,8 @@ export default {
     cell_append(cell){
       this.cells.push(cell);
     },
+
+
     cell_remove(cell){
       this.$_.remove(this.cells, {id: cell.id})
       this.cells = this.$_.concat(this.cells)
@@ -221,6 +217,8 @@ export default {
        this.cells[index] = cell
        console.log(this.cells, index);
     },
+
+
     async delCell(cell){
       var vm = this
       const response = await this.$axios.$post("/handler.py", {
@@ -236,6 +234,25 @@ export default {
       console.log(cell)
       this.$store.commit("modal/open", cell)
     },
+    async search(query, event){
+      var vm = this
+      console.log(query, event)
+      // if(query.length < 3)
+      //   return
+      // return;
+      const response = await this.$axios.$post("/handler.py", {
+        action: "search",
+        query,
+      })
+      
+      if(response.status == true){
+        if(response.count > 0){
+          this.cells = response.cells
+        }else{
+          this.cells = this.cells_init
+        }
+      }
+    }
   },
   
 }

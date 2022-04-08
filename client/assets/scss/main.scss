@@ -73,7 +73,8 @@ main{
   margin-right: 20px;
   .search-content{
     position: relative;
-    border-bottom: 2px solid $color-1;
+    
+    border-bottom: 1px solid white;
     .icon-content{
       position: absolute;
       left: 15px;
@@ -81,10 +82,11 @@ main{
       transform: translateY(-50%);
       line-height: 0;
       svg{
-        fill: $color-1;
+        fill: white;
       }
     }
     input{
+      color: white;
       width: 150px;
       height: 36px;
       padding: 5px 15px;
@@ -153,10 +155,13 @@ main{
     grid-template-columns: repeat(4, calc(100/4)+#{"%"});
   }
   @media (min-width: 1200px){
-    grid-template-columns: repeat(5, calc(100/5)+#{"%"});
+    grid-template-columns: repeat(6, calc(100/6)+#{"%"});
   }
   @media (min-width: 1440px){
-    grid-template-columns: repeat(6, calc(100/6)+#{"%"});
+    grid-template-columns: repeat(7, calc(100/7)+#{"%"});
+  }
+  @media (min-width: 1600px){
+    grid-template-columns: repeat(8, calc(100/8)+#{"%"});
   }
 }
 
@@ -633,4 +638,18 @@ main{
 .tags-input-typeahead-item-highlighted-default {
   color: $color-1;
   background-color: white;
+}
+.a-scale {
+  animation: a-scale 0.2s ease-in both;
+  transform: translate3d(0, 0, 0);
+  animation-delay: calc(0.01s * var(--i));
+}
+
+@keyframes a-scale {
+  0%{
+    transform: scale(0);
+  }
+  100%{
+    transform: scale(1);
+  }
 }

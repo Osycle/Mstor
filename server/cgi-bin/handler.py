@@ -79,6 +79,18 @@ if os.environ.get("REQUEST_METHOD") == "POST":
         # carousel += f"<img src='{image}'>"
       print(f"<img src='{page.images[0]}'>")
       exit()
+    if(result["action"] == "search"):
+      query = result["query"]
+      found = db.search(query)
+      found = db.date_timestamp(found)
+      result = {
+        "status": True,
+        "count": len(found),
+        "cells": found
+      }
+      result = json.dumps(result)
+      print(result)
+      exit()
     if(result["action"] == "fetch_cells"):
       cells = db.fetch_cells()
       tags = db.give_tags()
