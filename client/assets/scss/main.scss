@@ -87,7 +87,7 @@ main{
     }
     input{
       color: white;
-      width: 150px;
+      width: 200px;
       height: 36px;
       padding: 5px 15px;
       padding-left: 50px;
@@ -162,6 +162,16 @@ main{
   }
   @media (min-width: 1600px){
     grid-template-columns: repeat(8, calc(100/8)+#{"%"});
+  }
+}
+.cells-empty{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  p{
+    font-size: 20px;
+    font-weight: 400;
   }
 }
 
