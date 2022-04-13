@@ -22,10 +22,11 @@
                 -->
                 <VueEditor 
                   v-model="description" 
+                  useCustomImageHandler
+                  @image-added="handleImageAdded"
                   :editorOptions="editorSettings"
                   />
               </client-only>
-              <!-- <textarea name="" id="" v-model="description"></textarea> -->
             </div>
             <div class="tags-append">
               <tags-input element-id="tags"
@@ -114,6 +115,27 @@
       console.log(this.all_tags)
     },
     methods: {
+      handleImageAdded: function(file, Editor, cursorLocation, resetUploader) {
+        // An example of using FormData
+        // NOTE: Your key could be different such as:
+        // formData.append('file', file)
+
+        var formData = new FormData();
+        formData.append("image", file);
+
+        this.$axios({
+          url: "/files.py",
+          method: "POST",
+          data: formData
+        }).then(result => {
+          const url = result.data.url; // Get url from response
+          Editor.insertEmbed(cursorLocation, "image", url);
+          resetUploader();
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
       async submit(){
         if(this.edit_cell)
           this.editCell()
