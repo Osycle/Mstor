@@ -6,7 +6,7 @@ export const actions = {
 
   async query(context, params){
     try {
-      const data = await this.$axios.$post("/handler.py", params);
+      const data = await this.$axios.$get("cells/", params);
       return data;
     }catch(e){
       throw e;

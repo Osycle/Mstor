@@ -377,7 +377,7 @@ main{
     }
   }
   .date-content{
-    display: none;
+    // display: none;
     position: absolute;
     bottom: 5px;
     left: 11px;
@@ -544,8 +544,11 @@ main{
   margin: -3px;
   overflow: hidden;
   width: 146px;
-  position: relative;
-  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  // display: none;
   &:before{
     content: "";
     width: 100%;
@@ -601,8 +604,8 @@ main{
 
 
 .tags-input-badge-selected-default {
-  color: $color-1;
-  background-color: white;
+  color: white;
+  background-color: $color-2;
 }
 
 .typeahead-hide-btn {
@@ -649,12 +652,14 @@ main{
   color: $color-1;
   background-color: white;
 }
+
+
+// animations
 .a-scale {
   animation: a-scale 0.2s ease-in both;
   transform: translate3d(0, 0, 0);
   animation-delay: calc(0.01s * var(--i));
 }
-
 @keyframes a-scale {
   0%{
     transform: scale(0);

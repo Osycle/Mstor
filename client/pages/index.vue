@@ -26,11 +26,11 @@
               </div>
               <div class="cell-wrapper">
                 <div class="date-content">
-                  {{ new Date(cell.date_time*1000) | dateFormat('D MMMM YYYY')}}
+                  {{ new Date(cell.time_create) | dateFormat('D MMMM YYYY')}}
                 </div>
                 <div class="content">
                   <!-- <nuxt-link :to="'/cell/'+cell.id">Далее</nuxt-link> -->
-                  <div v-html="parseText(cell.description)" class="content-wrapper"></div>
+                  <div v-html="parse_text(cell.content)" class="content-wrapper"></div>
                 </div>
               </div>
               <div class="btn-content">
@@ -77,7 +77,10 @@
 import {Fancybox} from "@fancyapps/ui";
 import Modal from '@/components/Modal'
 
-
+import { createApp } from 'vue'
+import MasonryWall from '@yeger/vue-masonry-wall'
+// const app = createApp()
+// app.use(MasonryWall)
 
 export default {
   data(){
@@ -109,6 +112,7 @@ export default {
   async asyncData(context){
     try{
       const data = await context.store.dispatch("trans/query", { action: "fetch_cells" })
+      // console.log(data)
       return {
         cells: data.cells,
         cells_init: data.cells,
@@ -192,12 +196,15 @@ export default {
       })
       return "<div class='links-content'>"+out_content+"</div>";
     },
-    parseText(string){
-      string = "<div class='text-content'>"+string+"</div>"
+    parse_text(string){
+      
       let tpl_links = this.parse_links(string);
       let tpl_media = this.parse_media(string);
-      string = string.replace(/<p><br><\/p>|<p><\/p>|<a.+?>|<iframe.+?><\/iframe>|<img.+?>/gim, "");
-      string = string.replace(/<p><br><\/p>|<p><\/p>/gim, "");
+      // string = $(string).text()
+      // string = string.replace(/<p><br><\/p>|<p><\/p>|<a.+?>|<iframe.+?><\/iframe>|<img.+?>/gim, " ");
+      // string = string.replace(/<p><br><\/p>|<p><\/p>/gim, "");
+      // console.log(string)
+      string = "<div class='text-content'>"+string+"</div>"
       string += `
         <div class="content-detail">
           ${tpl_links}
@@ -212,8 +219,6 @@ export default {
     cell_append(cell){
       this.cells.push(cell);
     },
-
-
     cell_remove(cell){
       this.$_.remove(this.cells, {id: cell.id})
       this.cells = this.$_.concat(this.cells)
@@ -221,28 +226,24 @@ export default {
     cell_update(cell){
        var index = this.$_.findIndex(this.cells, {'id': cell.id});
        this.cells[index] = cell
-       console.log(this.cells, index);
+      //  console.log(this.cells, index);
     },
 
 
     async delCell(cell){
-      var vm = this
-      const response = await this.$axios.$post("/handler.py", {
-        action: "delete_cell",
-        cell_id: cell.id
-      })
+      const response = await this.$axios.$delete("/cells/"+cell.id+"/")
       if(response.status == true){
         this.cell_remove(cell)
       }
     },
     async editCell(cell){
       var vm = this
-      console.log(cell)
+      // console.log(cell)
       this.$store.commit("modal/open", cell)
     },
     async search(query, event){
       var vm = this
-      console.log(query, event)
+      // console.log(query, event)
       if(query.length < 3){
         this.cells = this.cells_init
         return;

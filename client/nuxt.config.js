@@ -1,6 +1,8 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   target: 'server',
+  // mode: 'spa',
+  ssr: true,
   server: {
     port: 3030,
   },
@@ -34,6 +36,7 @@ export default {
     { src: '~/plugins/vue-tagsinput.js' },
     { src: '~/plugins/vue-filter-date-format.js' },
     { src: '~/plugins/owl.js', ssr: false },
+    { src: '~/plugins/vue-masonry-wall.js', srr: false },
     { src: '~/plugins/vue2-editor.js', ssr: false },
   ],
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -55,7 +58,8 @@ export default {
     "vue2-editor/nuxt",
   ],
   axios: {
-    baseURL: 'http://localhost:4040/cgi-bin/',
+    // baseURL: 'http://localhost:4040/cgi-bin/',
+    baseURL: 'http://127.0.0.1:8000/api/v1/',
     //credentials: false,
     headers: {
       //"Content-Type": "application/json; charset=UTF-8",

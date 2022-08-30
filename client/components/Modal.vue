@@ -20,12 +20,11 @@
                   :customModules="customModulesForEditor"
                   :editorOptions="editorSettings"
                 -->
-                <VueEditor 
-                  v-model="description" 
-                  useCustomImageHandler
-                  @image-added="handleImageAdded"
+                <VueEditor
+                  v-model="content" 
                   :editorOptions="editorSettings"
                   />
+                <!-- <textarea v-else v-model="content"></textarea> -->
               </client-only>
             </div>
             <div class="tags-append">
@@ -63,7 +62,7 @@
     data(){
       return {
         selectedTags: [],
-        description: "",
+        content: "",
         tags: [],
         existing_tags: [],
         customToolbar: [
@@ -100,7 +99,7 @@
     },
     created(){
       if(this.edit_cell){
-        this.description = this.edit_cell.description
+        this.content = this.edit_cell.content
         this.edit_cell.tags.forEach((item)=>{
           this.selectedTags.push({value: item.name})
         })
@@ -112,30 +111,12 @@
     },
     mounted(){
       window.ss = this
-      console.log(this.all_tags)
+      // console.log(this.all_tags)
     },
     methods: {
-      handleImageAdded: function(file, Editor, cursorLocation, resetUploader) {
-        // An example of using FormData
-        // NOTE: Your key could be different such as:
-        // formData.append('file', file)
-
-        var formData = new FormData();
-        formData.append("image", file);
-
-        this.$axios({
-          url: "/files.py",
-          method: "POST",
-          data: formData
-        }).then(result => {
-          const url = result.data.url; // Get url from response
-          Editor.insertEmbed(cursorLocation, "image", url);
-          resetUploader();
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    },
+      customModulesForEditor (d){
+        console.log(d, "customModulesForEditor")
+      },
       async submit(){
         if(this.edit_cell)
           this.editCell()
@@ -143,13 +124,10 @@
           this.addCell()
       },
       async editCell(){
-        const response = await this.$axios.$post("/handler.py", {
+        const response = await this.$axios.$put("/cells/"+this.edit_cell.id+"/", {
           action: "edit_cell",
-          content: {
-            id: this.edit_cell.id,
-            description: this.description,
-            tags: this.tags,
-          }
+          content: this.content,
+          tags: this.tags
         })
         if(response.status){
           this.$emit("cell_update", response.cell)
@@ -157,12 +135,10 @@
         }
       },
       async addCell(){
-        const response = await this.$axios.$post("/handler.py", {
+        const response = await this.$axios.$post("/cells/", {
           action: "add_cell",
-          content: {
-            description: this.description,
-            tags: this.tags,
-          }
+          content: this.content,
+          tags: this.tags
         })
         if(response.status){
           this.$emit("cell_append", response.cell)
@@ -224,7 +200,7 @@
       position: relative;
     }
     textarea{
-      width: calc(100% - 40px);
+      width: 800px;
       min-height: 200px;
       //border: 1px solid var(--color-1);
       border: 0;
