@@ -18,6 +18,9 @@ $border-def: var(--border-def);
 
 $color-red: #d71515;
 
+$font-family-1: 'Myriad Pro';
+$font-family-2: 'Manrope';
+
 @mixin hover-outshadow{
   transition: 0.2s ease;
   backface-visibility: hidden;

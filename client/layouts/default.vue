@@ -29,7 +29,8 @@ export default {
         // {src: '/js/plugins/jquery.fancybox.js'},
       ],
       link: [
-        {href: '/fonts/MyriadPro/stylesheet.css', rel: "stylesheet"},
+        // {href: '/fonts/MyriadPro/stylesheet.css', rel: "stylesheet"},
+        {href: '/fonts/Manrope/stylesheet.css', rel: "stylesheet"},
         // {href: '@/node_modules/vue-wysiwyg/dist/vueWysiwyg.css'}
       ]
     }

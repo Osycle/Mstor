@@ -2,7 +2,7 @@
 /* main.css */
 :root{
   --color-1: #202b60;
-  --color-2: #6881ff;
+  --color-2: #5262b5;
   --color-3: #7fffd4;
   --color-4: #3b356c;
   --color-5: #282934;
@@ -48,6 +48,7 @@ main{
   right: 30px;
   bottom: 20px;
   display: flex;
+  z-index: 1;
   .btn-add{
     background-color: $color-1;
     display: flex;
@@ -164,6 +165,11 @@ main{
     grid-template-columns: repeat(8, calc(100/8)+#{"%"});
   }
 }
+.well{
+  @media (min-width: 992px){
+    width: calc(100% - 500px);
+  }
+}
 .cells-empty{
   display: flex;
   align-items: center;
@@ -183,12 +189,11 @@ main{
   // width: calc(100% - 150px);
 }
 .cell-wrapper{
-  padding: 0;
   background-color: $color-5;
+  overflow: hidden;
   //width: 130px;
   // min-height: 130px;
-  // max-height: 200px;
-  height: 200px;
+  // height: 200px;
   position: relative;
   // overflow-y: auto;
   &:before{
@@ -208,7 +213,7 @@ main{
 .cell{
   //flex-basis: 130px;    
   margin: 0;
-  font-size: 12px;
+  font-size: 14px;
   position: relative;
   &:before{
     content: "";
@@ -227,7 +232,6 @@ main{
   }
   &:hover{
     .btn{
-      
       // transform: scale(1);
       background-color: #3f414c;
       opacity: 1;
@@ -240,6 +244,9 @@ main{
   .content{
     // word-break: break-word;
     height: inherit;
+    max-height: 225px;
+    max-width: 250px;
+    overflow: hidden;
   }
   .content-wrapper{
     display: flex;
@@ -266,8 +273,7 @@ main{
   .text-content{
     max-width: 100%;
     overflow: hidden;
-    padding: 15px 15px;
-    padding-right: 20px;
+    padding: 20px;
     height: 100%;
     min-height: 50%;
     color: white;
@@ -577,7 +583,7 @@ main{
   padding-right: 20px;
   padding-left: 10px;
   height: 35px;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 700;
   line-height: 1;
   text-align: center;
@@ -594,7 +600,6 @@ main{
 }
 
 .tags-input-badge-pill {
-
   @include shadow-border();
   &.disabled {
     padding-right: .6em;
@@ -652,7 +657,18 @@ main{
   color: $color-1;
   background-color: white;
 }
-
+.btn-def{
+  @extend .shadow-def;
+  background-color: var(--color-3);
+  color: var(--color-1);
+  padding: 10px 20px;
+  font-weight: 600;
+  //border-left: var(--border-def);
+  &.red-btn{
+    background-color: $color-red;
+    color: white;
+  }
+}
 
 // animations
 .a-scale {
@@ -668,3 +684,118 @@ main{
     transform: scale(1);
   }
 }
+
+
+
+.bar{
+  width: 500px;
+  height: 100%;
+  overflow-y: auto;
+  position: fixed;
+  right: 0;
+  top: 0;
+  .quillWrapper .ql-snow {
+    .ql-fill{
+      fill: white;
+    }
+    .ql-stroke{
+      stroke: white;
+    }
+  }
+  .ql-snow .ql-toolbar .ql-picker-item.ql-selected, .ql-snow .ql-toolbar .ql-picker-item:hover, .ql-snow .ql-toolbar .ql-picker-label.ql-active, .ql-snow .ql-toolbar .ql-picker-label:hover, .ql-snow .ql-toolbar button.ql-active, .ql-snow .ql-toolbar button:focus, .ql-snow .ql-toolbar button:hover, .ql-snow.ql-toolbar .ql-picker-item.ql-selected, .ql-snow.ql-toolbar .ql-picker-item:hover, .ql-snow.ql-toolbar .ql-picker-label.ql-active, .ql-snow.ql-toolbar .ql-picker-label:hover, .ql-snow.ql-toolbar button.ql-active, .ql-snow.ql-toolbar button:focus, .ql-snow.ql-toolbar button:hover{
+    color: $color-3;
+  }
+  .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke, .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter, .ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke, .ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke-miter, .ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke, .ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter, .ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke, .ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke-miter, .ql-snow .ql-toolbar button.ql-active .ql-stroke, .ql-snow .ql-toolbar button.ql-active .ql-stroke-miter, .ql-snow .ql-toolbar button:focus .ql-stroke, .ql-snow .ql-toolbar button:focus .ql-stroke-miter, .ql-snow .ql-toolbar button:hover .ql-stroke, .ql-snow .ql-toolbar button:hover .ql-stroke-miter, .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke, .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter, .ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke, .ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke-miter, .ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke, .ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter, .ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke, .ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke-miter, .ql-snow.ql-toolbar button.ql-active .ql-stroke, .ql-snow.ql-toolbar button.ql-active .ql-stroke-miter, .ql-snow.ql-toolbar button:focus .ql-stroke, .ql-snow.ql-toolbar button:focus .ql-stroke-miter, .ql-snow.ql-toolbar button:hover .ql-stroke, .ql-snow.ql-toolbar button:hover .ql-stroke-miter{
+    stroke: $color-3;
+  }
+  .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-fill, .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke.ql-fill, .ql-snow .ql-toolbar .ql-picker-item:hover .ql-fill, .ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke.ql-fill, .ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-fill, .ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke.ql-fill, .ql-snow .ql-toolbar .ql-picker-label:hover .ql-fill, .ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke.ql-fill, .ql-snow .ql-toolbar button.ql-active .ql-fill, .ql-snow .ql-toolbar button.ql-active .ql-stroke.ql-fill, .ql-snow .ql-toolbar button:focus .ql-fill, .ql-snow .ql-toolbar button:focus .ql-stroke.ql-fill, .ql-snow .ql-toolbar button:hover .ql-fill, .ql-snow .ql-toolbar button:hover .ql-stroke.ql-fill, .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-fill, .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke.ql-fill, .ql-snow.ql-toolbar .ql-picker-item:hover .ql-fill, .ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke.ql-fill, .ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-fill, .ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke.ql-fill, .ql-snow.ql-toolbar .ql-picker-label:hover .ql-fill, .ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke.ql-fill, .ql-snow.ql-toolbar button.ql-active .ql-fill, .ql-snow.ql-toolbar button.ql-active .ql-stroke.ql-fill, .ql-snow.ql-toolbar button:focus .ql-fill, .ql-snow.ql-toolbar button:focus .ql-stroke.ql-fill, .ql-snow.ql-toolbar button:hover .ql-fill, .ql-snow.ql-toolbar button:hover .ql-stroke.ql-fill{
+    fill: $color-3;
+  }
+  .ql-toolbar{
+    background-color: $color-2;
+    position: relative;
+    // box-shadow: 5px 5px 0px 2px black, 0px 0px 0px 2px black;
+    z-index: 1;
+    &.ql-snow{
+      border: none;
+      border-bottom: 3px solid black;
+    }
+  }
+  .ql-container{
+    background-color: white;
+    font-family: inherit;
+    &:before{
+      content: "";
+      background-image: url('static/img/kletka.png');
+      // background-image: url('img/');
+      background-size: 11px;
+      opacity: 0.4;
+      z-index: 0;
+      // background-position: -110px;
+      background-repeat: repeat;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+  }
+  .ql-editor{
+    background-color: transparent;
+    color: black;
+    overflow-y: auto;
+    position: relative;
+    height: 200px;
+    font-weight: 500;
+    font-family: $font-family-2;
+    p{
+      line-height: 160%;
+      font-size: 14px;
+    }
+  }
+}
+.bar-wrapper{
+  // color: white;
+  background-color: $color-5;
+  padding: 30px 35px;
+  height: 100%;
+}
+.bar-cap{
+  text-align: center;
+  .cap{
+    font-weight: 700;
+    font-size: 20px;
+    display: inline-block;
+    margin-bottom: 20px;
+    position: relative;
+    &:before, &:after{
+      content: "";
+      display: inline-block;
+      position: absolute;
+      width: 20px;
+      height: 0;
+      border-bottom: 4px double white;
+      background-color: transparent;
+      top: calc(50% - 1px);
+    }
+    &:before{
+      left: -30px;
+    }
+    &:after{
+      right: -30px;
+    }
+  }
+}
+.bar-input{
+  @extend .shadow-def;
+}
+.tags-input input{
+  @extend .shadow-def;  
+}
+
+.bar-footer{
+  text-align: center;
+  border-top: 1px solid white;
+}
+

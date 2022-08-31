@@ -5,7 +5,7 @@
       @cell_update="cell_update" 
       :all_tags="all_tags"
       v-if="$store.state.modal.status"/>
-    <div class="tags-main">
+    <div class="tags-main hide">
       <div class="tags-items">
         <div v-for="(tag, key) in all_tags" :key="key" v-if="key<8" class="tag-item">
           <span role="button" class="tag-link">
@@ -16,7 +16,7 @@
     </div>
     <div class="container-fluid">
       <div class="main-wrapper">
-        <div class="cells-content">
+        <div class="cells-content hide">
           <div class="cells" v-if="cells.length">
             <div class="cell a-scale" v-for="(cell, key) in cells" :key="key" :style="'--i: '+key">
               <div class="tags-content">
@@ -52,11 +52,30 @@
             </div>
           </div>
         </div>
+        <div class="well">
+          <div class="well-wrapper">
+            <masonry-wall :items="cells" :ssr-columns="1" :column-width="250" :gap="10">
+              <template #default="{ item }">
+                <div class="cell" @click="cell_select(item)">
+                  <div class="cell-wrapper">
+                    <div class="date-content hide">
+                      {{ new Date(item.time_create) | dateFormat('D MMMM YYYY')}}
+                    </div>
+                    <div class="content">
+                      <div v-html="parse_text(item.content)" class="content-wrapper"></div>
+                    </div>
+                  </div>                
+                </div>
+              </template>
+            </masonry-wall>
+          </div>
+        </div>
       </div>
 
     </div>
+    <Bar :cur_cell="current_cell"/>
     <div class="fixpanel">
-      <div id="search" class="search">
+      <div id="search" class="search hide">
         <div class="search-content">
           <input type="search" name="search" @keyup="search(search_query, $event)" v-model="search_query">
           <div class="icon-content">
@@ -64,7 +83,7 @@
           </div>
         </div>
       </div>
-      <span class="btn-content">
+      <span class="btn-content hide">
         <a href="javascript:;" class="btn-add" @click="$store.commit('modal/open')">
           <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 32 32" viewBox="0 0 32 32"><switch><g><path d="M28,2H7C6.4,2,6,2.4,6,3v3H3C2.4,6,2,6.4,2,7v21c0,0.6,0.4,1,1,1h21c0.6,0,1-0.4,1-1v-3h3     c0.6,0,1-0.4,1-1V3C29,2.4,28.6,2,28,2z M23,27H4V8h3h16v16V27z M27,23h-2V7c0-0.6-0.4-1-1-1H8V4h19V23z"/><path d="M18,17h-4v-4c0-0.6-0.4-1-1-1s-1,0.4-1,1v4H8c-0.6,0-1,0.4-1,1s0.4,1,1,1h4v4c0,0.6,0.4,1,1,1s1-0.4,1-1     v-4h4c0.6,0,1-0.4,1-1S18.6,17,18,17z"/></g></switch></svg>
         </a>
@@ -76,19 +95,25 @@
 <script>
 import {Fancybox} from "@fancyapps/ui";
 import Modal from '@/components/Modal'
+import Bar from '@/components/Bar'
 
-import { createApp } from 'vue'
-import MasonryWall from '@yeger/vue-masonry-wall'
+// import { createApp } from 'vue'
+// import MasonryWall from '@yeger/vue-masonry-wall'
 // const app = createApp()
 // app.use(MasonryWall)
 
 export default {
   data(){
     return {
+      items: [
+        { title: 'First', description: 'The first item.' },
+        { title: 'Second', description: 'The second item.' },
+      ],
       description_content: null,
       test: [],
       data: null,
       cells: [],
+      current_cell: null,
       cells_init: [],
       search_query: "",
       all_tags: [],
@@ -96,6 +121,7 @@ export default {
   },
   compontents:{
     Modal,
+    Bar,
   },
   async mounted(){
     window.vm_index = this;
@@ -215,6 +241,9 @@ export default {
       
       // string = newstr+string
       return string;
+    },
+    cell_select(cell){
+      this.current_cell = cell
     },
     cell_append(cell){
       this.cells.push(cell);

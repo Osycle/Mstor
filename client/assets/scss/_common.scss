@@ -73,7 +73,7 @@
 
 body{
   font-size: 15px;
-  font-family: 'Myriad Pro';
+  font-family: $font-family-1;
   color: white;
 }
 
@@ -110,4 +110,8 @@ input:focus, button:focus{
 
 .hide{
   display: none;
+}
+
+.shadow-def{
+  box-shadow: 5px 5px 0px 2px black, 0px 0px 0px 2px black;
 }
