@@ -1,10 +1,5 @@
 <template>
   <div class="index-wrapper">
-    <Modal 
-      @cell_append="cell_append" 
-      @cell_update="cell_update" 
-      :all_tags="all_tags"
-      v-if="$store.state.modal.status"/>
     <div class="tags-main hide">
       <div class="tags-items">
         <div v-for="(tag, key) in all_tags" :key="key" v-if="key<8" class="tag-item">
@@ -14,7 +9,7 @@
         </div>
       </div>
     </div>
-    <div class="container-fluid">
+    <div class="container-p">
       <div class="main-wrapper">
         <div class="cells-content hide">
           <div class="cells" v-if="cells.length">
@@ -73,7 +68,12 @@
       </div>
 
     </div>
-    <Bar :cur_cell="current_cell"/>
+    <Bar 
+      :current_cell="current_cell" 
+      @cell_append="cell_append"
+      @cell_update="cell_update" 
+      @cell_remove="cell_remove"
+      />
     <div class="fixpanel">
       <div id="search" class="search hide">
         <div class="search-content">
@@ -83,10 +83,12 @@
           </div>
         </div>
       </div>
-      <span class="btn-content hide">
-        <a href="javascript:;" class="btn-add" @click="$store.commit('modal/open')">
-          <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 32 32" viewBox="0 0 32 32"><switch><g><path d="M28,2H7C6.4,2,6,2.4,6,3v3H3C2.4,6,2,6.4,2,7v21c0,0.6,0.4,1,1,1h21c0.6,0,1-0.4,1-1v-3h3     c0.6,0,1-0.4,1-1V3C29,2.4,28.6,2,28,2z M23,27H4V8h3h16v16V27z M27,23h-2V7c0-0.6-0.4-1-1-1H8V4h19V23z"/><path d="M18,17h-4v-4c0-0.6-0.4-1-1-1s-1,0.4-1,1v4H8c-0.6,0-1,0.4-1,1s0.4,1,1,1h4v4c0,0.6,0.4,1,1,1s1-0.4,1-1     v-4h4c0.6,0,1-0.4,1-1S18.6,17,18,17z"/></g></switch></svg>
-        </a>
+      <span class="btn-content">
+        <a href="javascript:;" class="flex ai-center" @click="current_cell = null">
+          <span class="btn-add">
+            <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 32 32" viewBox="0 0 32 32"><switch><g><path d="M28,2H7C6.4,2,6,2.4,6,3v3H3C2.4,6,2,6.4,2,7v21c0,0.6,0.4,1,1,1h21c0.6,0,1-0.4,1-1v-3h3     c0.6,0,1-0.4,1-1V3C29,2.4,28.6,2,28,2z M23,27H4V8h3h16v16V27z M27,23h-2V7c0-0.6-0.4-1-1-1H8V4h19V23z"/><path d="M18,17h-4v-4c0-0.6-0.4-1-1-1s-1,0.4-1,1v4H8c-0.6,0-1,0.4-1,1s0.4,1,1,1h4v4c0,0.6,0.4,1,1,1s1-0.4,1-1     v-4h4c0.6,0,1-0.4,1-1S18.6,17,18,17z"/></g></switch></svg>
+          </span>
+        </a>    
       </span>
     </div>
   </div>
@@ -124,9 +126,7 @@ export default {
     Bar,
   },
   async mounted(){
-    window.vm_index = this;
-
-    
+    window.vm_index = this;    
     $(document).off("click.more", ".btn-views")
     $(document).on("click.more", ".btn-views", function(){
       $(this).closest(".cell").find(".content-detail").toggleClass("active");
@@ -246,30 +246,19 @@ export default {
       this.current_cell = cell
     },
     cell_append(cell){
+      console.log(cell, 'Я вызвался')
       this.cells.push(cell);
     },
-    cell_remove(cell){
-      this.$_.remove(this.cells, {id: cell.id})
+    cell_remove(cell_id){
+      this.$_.remove(this.cells, {id: cell_id})
       this.cells = this.$_.concat(this.cells)
     },
     cell_update(cell){
        var index = this.$_.findIndex(this.cells, {'id': cell.id});
        this.cells[index] = cell
-      //  console.log(this.cells, index);
+       this.cells = this.$_.concat(this.cells)
     },
 
-
-    async delCell(cell){
-      const response = await this.$axios.$delete("/cells/"+cell.id+"/")
-      if(response.status == true){
-        this.cell_remove(cell)
-      }
-    },
-    async editCell(cell){
-      var vm = this
-      // console.log(cell)
-      this.$store.commit("modal/open", cell)
-    },
     async search(query, event){
       var vm = this
       // console.log(query, event)

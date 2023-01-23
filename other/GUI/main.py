@@ -23,8 +23,8 @@ def btn_click():
   sys.stdout.reconfigure(encoding='utf-8')
   row = 0
   col = 0
-  for el in html.select(".votign-items > figure:not([class])"):
-    cap = el.select(".cap-content span")[0].text
+  for el in html.select(".info.indentation .info__col"):
+    cap = el.select(".item-info__title")[0].text
     row += 1
     if(row >= 5):
       col += 1

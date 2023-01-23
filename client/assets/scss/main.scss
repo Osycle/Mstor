@@ -26,7 +26,11 @@
 @import "_common";
 @import "_fancybox";
 
-
+a{
+  color: inherit;
+  text-decoration: none;
+  background-color: transparent;
+}
 [role="button"]{
   &:hover{
     cursor: pointer;
@@ -45,29 +49,33 @@ main{
 
 .fixpanel{
   position: fixed;
-  right: 30px;
+  right: 500px;
+  padding-right: 26px;
   bottom: 20px;
   display: flex;
   z-index: 1;
-  .btn-add{
-    background-color: $color-1;
-    display: flex;
-    position: relative;
-    align-items: center;
-    justify-content: center;
-    height: 46px;
-    width: 46px;
+}
+.btn-add{
+  background-color: $color-1;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 46px;
+  width: 46px;
+  transition: 0.2s ease;
+  box-shadow: 5px 5px 0px 2px black, 0px 0px 0px 3px black;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  &:focus{
+    transform: translateY(-2px);
+    box-shadow: 10px 10px 0px -5px black, -0px -0px 0px 3px black;
+  }
+  svg{
+    width: 25px;
     transition: 0.2s ease;
-    box-shadow: 5px 5px 0px 2px black, 0px 0px 0px 3px black;
-    &:focus{
-      transform: translateY(-2px);
-      box-shadow: 10px 10px 0px -5px black, -0px -0px 0px 3px black;
-    }
-    svg{
-      width: 25px;
-      transition: 0.2s ease;
-      fill: $color-3;
-    }
+    fill: $color-3;
   }
 }
 .search{
@@ -166,8 +174,9 @@ main{
   }
 }
 .well{
+  padding: 20px 20px 180px 20px;
   @media (min-width: 992px){
-    width: calc(100% - 500px);
+    width: calc(100% - 540px);
   }
 }
 .cells-empty{
@@ -277,6 +286,11 @@ main{
     height: 100%;
     min-height: 50%;
     color: white;
+    img{
+      max-width: 100%;
+      width: 40px;
+      margin: 5px;
+    }
     &:before{
       content: "";
       bottom: 0;
@@ -449,7 +463,15 @@ main{
     }
   }
 }
-
+.btn-remove{
+  display: flex;
+  align-items: center;
+  color: $color-red;
+  svg{
+    width: 23px;
+    fill: currentColor;
+  }
+}
 
 .cell-title{
   font-size: 13px;
@@ -661,9 +683,12 @@ main{
   @extend .shadow-def;
   background-color: var(--color-3);
   color: var(--color-1);
-  padding: 10px 20px;
   font-weight: 600;
   //border-left: var(--border-def);
+  .this-btn, a{
+    display: inline-block;
+    padding: 10px 20px;
+  }
   &.red-btn{
     background-color: $color-red;
     color: white;
@@ -690,7 +715,7 @@ main{
 .bar{
   width: 500px;
   height: 100%;
-  overflow-y: auto;
+  // overflow-y: auto;
   position: fixed;
   right: 0;
   top: 0;
@@ -760,6 +785,10 @@ main{
   background-color: $color-5;
   padding: 30px 35px;
   height: 100%;
+  .btn-content{
+    height: 40px;
+    text-align: right;
+  }
 }
 .bar-cap{
   text-align: center;
@@ -795,7 +824,9 @@ main{
 }
 
 .bar-footer{
-  text-align: center;
-  border-top: 1px solid white;
+  margin-top: 60px;
+  margin-bottom: 50px;  
+  display: flex;
+  justify-content: center;
 }
 
