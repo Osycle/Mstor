@@ -4,14 +4,14 @@ from rest_framework import serializers
 from .models import *
 
 class CellsSerializer(serializers.ModelSerializer):
-  # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+  user = serializers.HiddenField(default=serializers.CurrentUserDefault())
   class Meta:
     model = Cells
     depth = 1
     fields = '__all__'
 
 class TagsSerializer(serializers.ModelSerializer):
-  # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+  user = serializers.HiddenField(default=serializers.CurrentUserDefault())
   class Meta:
     model = Tags
     depth = 1

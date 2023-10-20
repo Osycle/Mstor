@@ -4,9 +4,10 @@ from rest_framework import generics, viewsets, mixins, serializers
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from .models import *
+from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 from .serializers import *
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
-from .permissions import *
+
 
 # IsAuthenticatedOrReadOnly - только автаризованные
 # IsAdminUser - только автаризованные
@@ -17,7 +18,7 @@ from .permissions import *
 
 class CellsViewSet(viewsets.ModelViewSet):
   serializer_class = CellsSerializer
-  # permission_classes = (IsAdminOrReadOnly,)
+  # permission_classes = (IsAdminUser,)
   queryset = Cells.objects.all()
   def list(self, request):
     cells_all = Cells.objects.all()
@@ -29,12 +30,18 @@ class CellsViewSet(viewsets.ModelViewSet):
 
   def create(self, request):
     data = request.data
-    cell_new = Cells.objects.create(content=data['content'])
-    cell_new.set_cell_tags(data['tags'])
+    print('cccccccccccccccccccccccccccccccccccccccccccccc', request.user.id, data.get('tags'))
+    cell_new = Cells.objects.create(content=data['content'], user_id=request.user.id)
+    # cell_new = Cells.objects.create(content="my test") 
+    # print(cell_new, 22222222222222222222222222222222222222222222)
+    if 'tags' in data:
+      cell_new.set_cell_tags(data['tags'])
+    
     return Response({
       "status": True,
       "cell": CellsSerializer(cell_new).data
     })
+
 
   def update(self, request, pk=None):
     data = request.data
@@ -54,7 +61,7 @@ class CellsViewSet(viewsets.ModelViewSet):
 
     cell_ser = CellsSerializer(data=data, instance=cell)          
     cell_ser.is_valid(raise_exception=True)
-    cell_ser.save()
+    cell_ser.save(commit=False)
 
     return Response({
       "status": True,
@@ -77,7 +84,7 @@ class CellsViewSet(viewsets.ModelViewSet):
 
 class TagsViewSet(viewsets.ModelViewSet):
   serializer_class = TagsSerializer
-  permission_classes = (IsOwnerOrReadOnly,)
+  # permission_classes = (IsOwnerOrReadOnly,)
   def list(self, request):
     tags_all = Tags.objects.all()
     return Response({

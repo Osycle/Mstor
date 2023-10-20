@@ -11,15 +11,15 @@ class Cells(models.Model):
   time_update = models.DateTimeField(auto_now=True)
   tags = models.ManyToManyField('Tags')
   user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
-
-
+  print(User, 11111111111111111111111)
+  
   def set_cell_tags(self, tags):
     set_tags_list = []
     if tags:
       for tag in tags:
         t = Tags.objects.filter(name=tag)
         if not t:
-          tag_new = Tags.objects.create(name=tag)
+          tag_new = Tags.objects.create(name=tag).save(commit=False)
         else:
           tag_new = t[0]
         set_tags_list.append(tag_new)
