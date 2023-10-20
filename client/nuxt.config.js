@@ -59,7 +59,8 @@ export default {
   ],
   axios: {
     // baseURL: 'http://localhost:4040/cgi-bin/',
-    baseURL: 'http://127.0.0.1:8000/api/v1/',
+    // baseURL: 'http://127.0.0.1:8000/api/v1/',
+    baseURL: 'http://localhost:8000/api/v1/',
     //credentials: false,
     headers: {
       //"Content-Type": "application/json; charset=UTF-8",
