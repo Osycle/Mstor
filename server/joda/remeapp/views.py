@@ -6,7 +6,7 @@ from rest_framework.decorators import action
 from .models import *
 from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 from .serializers import *
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, IsAuthenticated
 
 
 # IsAuthenticatedOrReadOnly - только автаризованные
@@ -18,8 +18,8 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 
 class CellsViewSet(viewsets.ModelViewSet):
   serializer_class = CellsSerializer
-  # permission_classes = (IsAdminUser,)
-  queryset = Cells.objects.all()
+  permission_classes = (IsAuthenticated,)
+  # queryset = Cells.objects.all()
   def list(self, request):
     cells_all = Cells.objects.all()
     tags_all = Tags.objects.all()
@@ -35,7 +35,7 @@ class CellsViewSet(viewsets.ModelViewSet):
     # cell_new = Cells.objects.create(content="my test") 
     # print(cell_new, 22222222222222222222222222222222222222222222)
     if 'tags' in data:
-      cell_new.set_cell_tags(data['tags'])
+      cell_new.set_cell_tags(data['tags'], request.user.id)
     
     return Response({
       "status": True,
@@ -57,7 +57,7 @@ class CellsViewSet(viewsets.ModelViewSet):
         if not Cells.objects.exclude(pk=pk).filter(tags__name=tag.name):
           Tags.objects.get(pk=tag.pk).delete()
 
-    cell.set_cell_tags(update_tags)    
+    cell.set_cell_tags(update_tags, user_id=request.user.id)
 
     cell_ser = CellsSerializer(data=data, instance=cell)          
     cell_ser.is_valid(raise_exception=True)

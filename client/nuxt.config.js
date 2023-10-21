@@ -32,6 +32,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     // { src: '~plugins/nuxt-quill-plugin', ssr: false }
+    { src: "~/plugins/axios.js", ssr: true },
     { src: '~/plugins/lodash.js' },
     { src: '~/plugins/vue-tagsinput.js' },
     { src: '~/plugins/vue-filter-date-format.js' },
@@ -40,7 +41,7 @@ export default {
     { src: '~/plugins/vue2-editor.js', ssr: false },
   ],
   // Auto import components: https://go.nuxtjs.dev/config-components
-  components: true,
+  components: [{ path: "~/components", pathPrefix: false }],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
@@ -56,6 +57,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxt/http',
     "vue2-editor/nuxt",
+    ['cookie-universal-nuxt', { alias: 'cookiz' }],
   ],
   axios: {
     // baseURL: 'http://localhost:4040/cgi-bin/',

@@ -1,4 +1,4 @@
-import imp
+
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
@@ -11,15 +11,17 @@ class Cells(models.Model):
   time_update = models.DateTimeField(auto_now=True)
   tags = models.ManyToManyField('Tags')
   user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
-  print(User, 11111111111111111111111)
+  print(User.objects.get(pk=2), 11111111111111111111111)
   
-  def set_cell_tags(self, tags):
+  def set_cell_tags(self, tags, user_id):
     set_tags_list = []
+    print(User.objects, 99999999999999999999999999999999999)
+    
     if tags:
       for tag in tags:
         t = Tags.objects.filter(name=tag)
         if not t:
-          tag_new = Tags.objects.create(name=tag).save(commit=False)
+          tag_new = Tags.objects.create(name=tag, user_id=user_id).save()
         else:
           tag_new = t[0]
         set_tags_list.append(tag_new)
